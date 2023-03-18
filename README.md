@@ -33,7 +33,7 @@
     ├──  composer.json
     ├──  composer.lock
     ├──  package-lock.json
-    ├──  package.json
+    └──  package.json
 ---
 
 ## Installation de l'environnement
