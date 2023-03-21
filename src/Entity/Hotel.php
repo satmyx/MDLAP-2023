@@ -33,12 +33,12 @@ class Hotel
     #[ORM\Column(length: 255)]
     private ?string $mail = null;
 
-    #[ORM\OneToMany(mappedBy: 'hotel', targetEntity: Chambre::class)]
-    private Collection $typeChambre;
+    #[ORM\OneToMany(mappedBy: 'apartenir', targetEntity: Chambre::class)]
+    private Collection $chambres;
 
     public function __construct()
     {
-        $this->typeChambre = new ArrayCollection();
+        $this->chambres = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -121,27 +121,27 @@ class Hotel
     /**
      * @return Collection<int, Chambre>
      */
-    public function getTypeChambre(): Collection
+    public function getChambres(): Collection
     {
-        return $this->typeChambre;
+        return $this->chambres;
     }
 
-    public function addTypeChambre(Chambre $typeChambre): self
+    public function addChambre(Chambre $chambre): self
     {
-        if (!$this->typeChambre->contains($typeChambre)) {
-            $this->typeChambre->add($typeChambre);
-            $typeChambre->setHotel($this);
+        if (!$this->chambres->contains($chambre)) {
+            $this->chambres->add($chambre);
+            $chambre->setApartenir($this);
         }
 
         return $this;
     }
 
-    public function removeTypeChambre(Chambre $typeChambre): self
+    public function removeChambre(Chambre $chambre): self
     {
-        if ($this->typeChambre->removeElement($typeChambre)) {
+        if ($this->chambres->removeElement($chambre)) {
             // set the owning side to null (unless already changed)
-            if ($typeChambre->getHotel() === $this) {
-                $typeChambre->setHotel(null);
+            if ($chambre->getApartenir() === $this) {
+                $chambre->setApartenir(null);
             }
         }
 

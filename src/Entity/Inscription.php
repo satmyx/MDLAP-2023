@@ -17,23 +17,24 @@ class Inscription
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $dateInscrit = null;
+    private ?\DateTimeInterface $dateInscription = null;
 
-    #[ORM\OneToMany(mappedBy: 'inscription', targetEntity: User::class)]
-    private Collection $inscrit;
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?User $licencie = null;
+
+    #[ORM\ManyToMany(targetEntity: Atelier::class, inversedBy: 'inscriptions')]
+    private Collection $atelierInscrit;
+
+    #[ORM\ManyToMany(targetEntity: Restauration::class, inversedBy: 'inscriptions')]
+    private Collection $restaurer;
 
     #[ORM\ManyToOne(inversedBy: 'inscriptions')]
-    private ?Restauration $restaurer = null;
-
-    #[ORM\ManyToOne(inversedBy: 'inscriptions')]
-    private ?Chambre $nuites = null;
-
-    #[ORM\ManyToOne(inversedBy: 'inscriptions')]
-    private ?Nuites $typenuites = null;
+    private ?Chambre $loger = null;
 
     public function __construct()
     {
-        $this->inscrit = new ArrayCollection();
+        $this->atelierInscrit = new ArrayCollection();
+        $this->restaurer = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -41,80 +42,86 @@ class Inscription
         return $this->id;
     }
 
-    public function getDateInscrit(): ?\DateTimeInterface
+    public function getDateInscription(): ?\DateTimeInterface
     {
-        return $this->dateInscrit;
+        return $this->dateInscription;
     }
 
-    public function setDateInscrit(\DateTimeInterface $dateInscrit): self
+    public function setDateInscription(\DateTimeInterface $dateInscription): self
     {
-        $this->dateInscrit = $dateInscrit;
+        $this->dateInscription = $dateInscription;
+
+        return $this;
+    }
+
+    public function getLicencie(): ?User
+    {
+        return $this->licencie;
+    }
+
+    public function setLicencie(?User $licencie): self
+    {
+        $this->licencie = $licencie;
 
         return $this;
     }
 
     /**
-     * @return Collection<int, User>
+     * @return Collection<int, Atelier>
      */
-    public function getInscrit(): Collection
+    public function getAtelierInscrit(): Collection
     {
-        return $this->inscrit;
+        return $this->atelierInscrit;
     }
 
-    public function addInscrit(User $inscrit): self
+    public function addAtelierInscrit(Atelier $atelierInscrit): self
     {
-        if (!$this->inscrit->contains($inscrit)) {
-            $this->inscrit->add($inscrit);
-            $inscrit->setInscription($this);
+        if (!$this->atelierInscrit->contains($atelierInscrit)) {
+            $this->atelierInscrit->add($atelierInscrit);
         }
 
         return $this;
     }
 
-    public function removeInscrit(User $inscrit): self
+    public function removeAtelierInscrit(Atelier $atelierInscrit): self
     {
-        if ($this->inscrit->removeElement($inscrit)) {
-            // set the owning side to null (unless already changed)
-            if ($inscrit->getInscription() === $this) {
-                $inscrit->setInscription(null);
-            }
-        }
+        $this->atelierInscrit->removeElement($atelierInscrit);
 
         return $this;
     }
 
-    public function getRestaurer(): ?Restauration
+    /**
+     * @return Collection<int, Restauration>
+     */
+    public function getRestaurer(): Collection
     {
         return $this->restaurer;
     }
 
-    public function setRestaurer(?Restauration $restaurer): self
+    public function addRestaurer(Restauration $restaurer): self
     {
-        $this->restaurer = $restaurer;
+        if (!$this->restaurer->contains($restaurer)) {
+            $this->restaurer->add($restaurer);
+        }
 
         return $this;
     }
 
-    public function getNuites(): ?Chambre
+    public function removeRestaurer(Restauration $restaurer): self
     {
-        return $this->nuites;
-    }
-
-    public function setNuites(?Chambre $nuites): self
-    {
-        $this->nuites = $nuites;
+        $this->restaurer->removeElement($restaurer);
 
         return $this;
     }
 
-    public function getTypenuites(): ?Nuites
+    public function getLoger(): ?Chambre
     {
-        return $this->typenuites;
+        return $this->loger;
     }
 
-    public function setTypenuites(?Nuites $typenuites): self
+    public function setLoger(?Chambre $loger): self
     {
-        $this->typenuites = $typenuites;
+        $this->loger = $loger;
 
         return $this;
     }

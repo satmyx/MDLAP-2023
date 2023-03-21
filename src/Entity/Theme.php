@@ -18,7 +18,7 @@ class Theme
     #[ORM\Column(length: 255)]
     private ?string $libelle = null;
 
-    #[ORM\OneToMany(mappedBy: 'theme', targetEntity: Atelier::class)]
+    #[ORM\OneToMany(mappedBy: 'thematique', targetEntity: Atelier::class)]
     private Collection $ateliers;
 
     public function __construct()
@@ -55,7 +55,7 @@ class Theme
     {
         if (!$this->ateliers->contains($atelier)) {
             $this->ateliers->add($atelier);
-            $atelier->setTheme($this);
+            $atelier->setThematique($this);
         }
 
         return $this;
@@ -65,8 +65,8 @@ class Theme
     {
         if ($this->ateliers->removeElement($atelier)) {
             // set the owning side to null (unless already changed)
-            if ($atelier->getTheme() === $this) {
-                $atelier->setTheme(null);
+            if ($atelier->getThematique() === $this) {
+                $atelier->setThematique(null);
             }
         }
 

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AtelierRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: AtelierRepository::class)]
@@ -17,13 +19,21 @@ class Atelier
     private ?string $libelle = null;
 
     #[ORM\Column]
-    private ?int $nbPlaces = null;
+    private ?int $nbplaces = null;
 
     #[ORM\ManyToOne(inversedBy: 'ateliers')]
-    private ?Theme $theme = null;
+    private ?Theme $thematique = null;
 
     #[ORM\ManyToOne(inversedBy: 'ateliers')]
     private ?Vacation $vacation = null;
+
+    #[ORM\ManyToMany(targetEntity: Inscription::class, mappedBy: 'atelierInscrit')]
+    private Collection $inscriptions;
+
+    public function __construct()
+    {
+        $this->inscriptions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -42,26 +52,26 @@ class Atelier
         return $this;
     }
 
-    public function getNbPlaces(): ?int
+    public function getNbplaces(): ?int
     {
-        return $this->nbPlaces;
+        return $this->nbplaces;
     }
 
-    public function setNbPlaces(int $nbPlaces): self
+    public function setNbplaces(int $nbplaces): self
     {
-        $this->nbPlaces = $nbPlaces;
+        $this->nbplaces = $nbplaces;
 
         return $this;
     }
 
-    public function getTheme(): ?Theme
+    public function getThematique(): ?Theme
     {
-        return $this->theme;
+        return $this->thematique;
     }
 
-    public function setTheme(?Theme $theme): self
+    public function setThematique(?Theme $thematique): self
     {
-        $this->theme = $theme;
+        $this->thematique = $thematique;
 
         return $this;
     }
@@ -74,6 +84,33 @@ class Atelier
     public function setVacation(?Vacation $vacation): self
     {
         $this->vacation = $vacation;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Inscription>
+     */
+    public function getInscriptions(): Collection
+    {
+        return $this->inscriptions;
+    }
+
+    public function addInscription(Inscription $inscription): self
+    {
+        if (!$this->inscriptions->contains($inscription)) {
+            $this->inscriptions->add($inscription);
+            $inscription->addAtelierInscrit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInscription(Inscription $inscription): self
+    {
+        if ($this->inscriptions->removeElement($inscription)) {
+            $inscription->removeAtelierInscrit($this);
+        }
 
         return $this;
     }

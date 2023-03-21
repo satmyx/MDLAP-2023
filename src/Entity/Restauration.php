@@ -22,7 +22,7 @@ class Restauration
     #[ORM\Column(length: 255)]
     private ?string $libelle = null;
 
-    #[ORM\OneToMany(mappedBy: 'restaurer', targetEntity: Inscription::class)]
+    #[ORM\ManyToMany(targetEntity: Inscription::class, mappedBy: 'restaurer')]
     private Collection $inscriptions;
 
     public function __construct()
@@ -71,7 +71,7 @@ class Restauration
     {
         if (!$this->inscriptions->contains($inscription)) {
             $this->inscriptions->add($inscription);
-            $inscription->setRestaurer($this);
+            $inscription->addRestaurer($this);
         }
 
         return $this;
@@ -80,10 +80,7 @@ class Restauration
     public function removeInscription(Inscription $inscription): self
     {
         if ($this->inscriptions->removeElement($inscription)) {
-            // set the owning side to null (unless already changed)
-            if ($inscription->getRestaurer() === $this) {
-                $inscription->setRestaurer(null);
-            }
+            $inscription->removeRestaurer($this);
         }
 
         return $this;
