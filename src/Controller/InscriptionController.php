@@ -9,17 +9,22 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Service\CallApiService;
 
 class InscriptionController extends AbstractController
 {
     #[Route('/inscription', name: 'app_inscription')]
-    public function index(EntityManagerInterface $manager, Request $request): Response
+    public function index(EntityManagerInterface $manager, Request $request, CallApiService $api): Response
     {
         $newInscription = new Inscription();
 
         $form = $this->createForm(InscriptionType::class, $newInscription);
 
         $form->handleRequest($request);
+        
+        $listeliciencie = $api->getLicencies()['hydra:member'];
+        
+        dump($listeliciencie);
 
 
         if($form->isSubmitted() && $form->isValid()) {
