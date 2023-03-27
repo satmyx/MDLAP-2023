@@ -22,10 +22,10 @@ class InscriptionController extends AbstractController
 
         $form->handleRequest($request);
         
-        $listeliciencie = $api->getLicencies()['hydra:member'];
+        // Ne pas oublier de modif quand la features security est mise en place
+        $licencie = $api->getLicencies(16890512079);
         
-        dump($listeliciencie);
-
+        $qualite = $api->getQualite($licencie[0]['idqualite']);
 
         if($form->isSubmitted() && $form->isValid()) {
 
@@ -38,6 +38,15 @@ class InscriptionController extends AbstractController
 
         return $this->render('inscription/index.html.twig', [
             'form' => $form->createview(),
+            'nomlicencie' => $licencie[0]['nom'],
+            'prenomlicencie' => $licencie[0]['prenom'],
+            'numerolicence' => $licencie[0]['numlicence'],
+            'adresse1' => $licencie[0]['adresse1'],
+            'cp' => $licencie[0]['cp'],
+            'ville' => $licencie[0]['ville'],
+            'tel' => $licencie[0]['tel'],
+            'mail' => $licencie[0]['mail'],
+            'qualite' => $qualite['libellequalite']
         ]);
     }
 }
