@@ -14,7 +14,8 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
+use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
+
 
 class RegistrationController extends AbstractController
 {
@@ -26,14 +27,15 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager,
+        VerifyEmailHelperInterface $verifyEmailHelper): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
+            // hash the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
@@ -41,6 +43,15 @@ class RegistrationController extends AbstractController
                 )
             );
 
+            $signatureComponents = $verifyEmailHelper->generateSignature(
+                'app_verify_email',
+                $user->getId(),
+                $user->getEmail(),
+                ['id' => $user->getId()]
+            );
+            #$this->addFlash('success', 'Confirm your email at : ' . $signatureComponents->getSignedUrl());
+            
+            
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -51,6 +62,7 @@ class RegistrationController extends AbstractController
                     ->to($user->getEmail())
                     ->subject('Please Confirm your Email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
+                    ->context(['signedUrl' => $signatureComponents->getSignedUrl()])
             );
             // do anything else you need here, like send an email
 
