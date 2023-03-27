@@ -15,12 +15,21 @@ class CallApiService
     }
     
     /**
-    * Permet de récupérer la liste des licenciés
+    * Permet de récupérer un des licenciés via un numéro de licence
     */
-    public function getLicencies() {
+    public function getLicencies($numlicencie) {
         $response = $this->client->request(
             'GET',
-            'http://apimdl/api/licencies'
+            'http://apimdl/api/licencies?numlicence='.$numlicencie
+        );
+
+        return $response->toArray()['hydra:member'];
+    }
+    
+    public function getQualite($idqualite) {
+        $response = $this->client->request(
+            'GET',
+            'http://apimdl/api/qualites/'.$idqualite
         );
 
         return $response->toArray();
