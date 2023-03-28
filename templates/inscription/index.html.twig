@@ -6,7 +6,6 @@
 {% block body %}
 
     <div class="container">
-        <h1>Informations du licencié</h1>
         <div class="row ">
 
             <div class="col-lg-4 col-md-12">
@@ -54,6 +53,16 @@
             </div>
         {% endfor %}
         <hr>
-        {{ form_row(form.restaurer, {"help": "","label": "Bulletin Réservation Accompagnant(e)", "required": true}) }}
+        {{ form_label(form.restaurer, 'Bulletin Réservation Accompagnant(e)') }}
+        {% for batch in form.restaurer|batch(2) %}
+            <div class="row">
+                {% for option in batch %}
+                    <div class="col">
+                        {{ form_label(option) }}
+                        {{ form_widget(option) }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}
