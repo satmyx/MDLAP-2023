@@ -30,7 +30,7 @@ class InscriptionType extends AbstractType
             ))
             ->add('loger', EntityType::class, array(
                 'class' => Chambre::class,
-                'multiple' => true,
+                'multiple' => false,
                 'expanded' => true,
             ));
     }
