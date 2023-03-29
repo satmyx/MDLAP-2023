@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,20 +16,22 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
-
+use Symfony\Component\Mailer\MailerInterface;
 
 class RegistrationController extends AbstractController
 {
-    private EmailVerifier $emailVerifier;
+    private $verifyEmailHelper;
+    private $mailer;
 
-    public function __construct(EmailVerifier $emailVerifier)
+    public function __construct(VerifyEmailHelperInterface $helper, MailerInterface $mailer)
     {
-        $this->emailVerifier = $emailVerifier;
+        $this->verifyEmailHelper = $helper;
+        $this->mailer = $mailer;
     }
 
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager,
-        VerifyEmailHelperInterface $verifyEmailHelper): Response
+        VerifyEmailHelperInterface $verifyEmailHelper, UserRepository $userRepository): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -42,21 +45,24 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
-
-            $signatureComponents = $verifyEmailHelper->generateSignature(
+            
+            $this->verifyUserEmail($request, $verifyEmailHelper, $userRepository, $entityManager);
+            
+            $entityManager->persist($user);
+            $entityManager->flush();
+            
+            /*
+            $signatureComponents = $this->verifyEmailHelper->generateSignature(
                 'app_verify_email',
                 $user->getId(),
                 $user->getEmail(),
                 ['id' => $user->getId()]
             );
             #$this->addFlash('success', 'Confirm your email at : ' . $signatureComponents->getSignedUrl());
-            
-            
-            $entityManager->persist($user);
-            $entityManager->flush();
 
             // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+            #$this->verifyEmailHelper->sendEmailConfirmation('app_verify_email', $user,
+            $this->verifyEmailHelper->validateEmailConfirmation('app_verify_email', $user,
                 (new TemplatedEmail())
                     ->from(new Address('newUser@localhost.com', 'Account Creation Bot'))
                     ->to($user->getEmail())
@@ -67,13 +73,40 @@ class RegistrationController extends AbstractController
             // do anything else you need here, like send an email
 
             return $this->redirectToRoute('_profiler_home');
+        */
         }
-
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
     }
 
+    #[Route('/verify/email', name: 'app_verify_email')]
+    public function verifyUserEmail(Request $request, VerifyEmailHelperInterface $verifyEmailHelper, 
+            UserRepository $userRepository, EntityManagerInterface $entityManager): Response
+    {
+        $user = $userRepository->find($request->query->get('id'));
+        if (!$user) {
+            throw $this->createNotFoundException();
+        }
+        
+        try {
+            $verifyEmailHelper->validateEmailConfirmation(
+                $request->getUri(),
+                $user->getId(),
+                $user->getEmail(),
+            );
+        } catch (VerifyEmailExceptionInterface $e) {
+            $this->addFlash('error', $e->getReason());
+            return $this->redirectToRoute('app_register');
+        }
+        
+        $user->setIsVerified(true);
+        $entityManager->flush();
+        $this->addFlash('success', 'Account Verified! You can now log in.');
+        return $this->redirectToRoute('app_login');
+    }
+    
+    /*
     #[Route('/verify/email', name: 'app_verify_email')]
     public function verifyUserEmail(Request $request): Response
     {
@@ -94,4 +127,6 @@ class RegistrationController extends AbstractController
         // TODO : Modifier cette ligne pour pointer vers l'espace utilisateur avec comptes valides
         return $this->redirectToRoute('app_register');
     }
+     * 
+     */
 }
