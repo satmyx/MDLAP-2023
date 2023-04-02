@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: InscriptionRepository::class)]
 class Inscription
@@ -22,6 +24,10 @@ class Inscription
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?User $licencie = null;
 
+    #[Assert\Count(
+        min: 1,
+        max: 5,
+    )]
     #[ORM\ManyToMany(targetEntity: Atelier::class, inversedBy: 'inscriptions')]
     private Collection $atelierInscrit;
 
