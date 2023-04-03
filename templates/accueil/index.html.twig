@@ -8,7 +8,25 @@
 
 {% block body %}
     <div>
-        <p>dates du congrès :</p>
+        <p>dates du congrès : {{ dateCongres }}</p>
+        <p>les ateliers :
+        {#{% for atelier in ateliers %}
+            {{ atelier.libelle }} {{ atelier.nbplaces }}
+        {% endfor %}#}
+        </p>
+        <p>les thèmes :
+        {% for theme in themes %}
+            {{ theme.libelle }},
+        {% endfor %}
+        </p>
+        <p>les vacations : {% for vacation in vacations %}
+            starts at:{{ vacation.dateHeureDebut|date('d/m/Y G:i') }}, ends at:{{ vacation.dateHeureFin|date('d/m/Y G:i') }},
+        {% endfor %}
+        </p>
+        <p>les hotels : {% for hotel in hotels %}
+            {{ hotel.nom }}, {{ hotel.adresse }}, {{ hotel.cp }}, {{ hotel.ville }}, {{ hotel.mail }}
+        {% endfor %}
+        </p>
     </div>
 {% endblock %}
 
