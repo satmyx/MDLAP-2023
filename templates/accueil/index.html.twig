@@ -10,9 +10,9 @@
     <div>
         <p>dates du congrès : {{ dateCongres }}</p>
         <p>les ateliers :
-        {#{% for atelier in ateliers %}
-            {{ atelier.libelle }} {{ atelier.nbplaces }}
-        {% endfor %}#}
+        {% for atelier in ateliers %}
+            {{ atelier.libelle }}
+        {% endfor %}
         </p>
         <p>les thèmes :
         {% for theme in themes %}
