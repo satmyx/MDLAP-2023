@@ -41,7 +41,7 @@
     font-weight: bold;
 }
 
-.form-error {
+.errorMessage {
     color:red;
 }
 

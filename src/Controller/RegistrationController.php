@@ -60,11 +60,11 @@ class RegistrationController extends AbstractController
                 $controleEntreeUtilisateur = (bool) preg_match($regex, $entreeUtilisateurNumLicence);
                 $correspondanceEntreNumeros = ((int) $entreeUtilisateurNumLicence === $numeroLicenceApi);
             } else {
-                return $this->redirectToRoute('app_logout');
+                $this->addFlash('test', 'Numéro invalide');
             }
             
             if (!($numeroLicenceApiExiste) || !($controleEntreeUtilisateur) || !($correspondanceEntreNumeros)) {
-                return $this->redirectToRoute('app_login');
+                $this->addFlash('test', 'Numéro invalide');
             }
             
             $entityManager->persist($user);

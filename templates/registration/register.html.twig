@@ -15,6 +15,9 @@
                     <h1>Création de votre compte licencié</h1> <br>
                     <h3>
                     {{ form_start(registrationForm) }}
+                        <div class="errorMessage">
+                            {{ form_errors(registrationForm) }}
+                        </div>
                         {{ form_row(registrationForm.numlicence, {'label' : 'Votre numéro de licence : '}) }} <br>
                         {{ form_row(registrationForm.email, {'label' : 'Votre adresse email : '}) }} <br>
                         {{ form_row(registrationForm.plainPassword) }} <br>
