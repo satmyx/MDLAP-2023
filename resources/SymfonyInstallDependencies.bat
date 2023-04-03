@@ -11,3 +11,4 @@ symfony composer require symfony/security-bundle
 symfony composer require symfony/validator
 symfony composer require symfonycasts/verify-email-bundle symfony/mailer
 symfony composer require symfony/asset
+symfony composer require symfony/http-client

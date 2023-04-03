@@ -16,6 +16,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
+use App\Service\CallApiService;
 
 class RegistrationController extends AbstractController
 {
@@ -28,7 +29,7 @@ class RegistrationController extends AbstractController
 
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, 
-            AppAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
+            AppAuthenticator $authenticator, EntityManagerInterface $entityManager, CallApiService $api): Response
     {
 	if ($this->getUser()) {
             return $this->redirectToRoute('app_user');
@@ -37,7 +38,7 @@ class RegistrationController extends AbstractController
 	$user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setPassword(
             $userPasswordHasher->hashPassword(
@@ -46,6 +47,26 @@ class RegistrationController extends AbstractController
                 )
             );
 
+            // TODO Appel du repository : UserRepository::VerifNumeroLicence($user);
+            $entreeUtilisateurNumLicence = $user->getNumlicence();
+            $appelApiNumLicence = $api->getLicencies($entreeUtilisateurNumLicence); // 16360514319 = numéro valide
+            $numeroLicenceApiExiste = isset($appelApiNumLicence[0]['numlicence']);
+            
+            // $regex = 11 Chiffres où le premier n'est pas un 0
+            $regex = '/^[1-9]\d{10}$/';
+            
+            if ($numeroLicenceApiExiste) {
+                $numeroLicenceApi = $appelApiNumLicence[0]['numlicence'];
+                $controleEntreeUtilisateur = (bool) preg_match($regex, $entreeUtilisateurNumLicence);
+                $correspondanceEntreNumeros = ((int) $entreeUtilisateurNumLicence === $numeroLicenceApi);
+            } else {
+                return $this->redirectToRoute('app_logout');
+            }
+            
+            if (!($numeroLicenceApiExiste) || !($controleEntreeUtilisateur) || !($correspondanceEntreNumeros)) {
+                return $this->redirectToRoute('app_login');
+            }
+            
             $entityManager->persist($user);
             $entityManager->flush();
 

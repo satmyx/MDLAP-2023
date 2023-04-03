@@ -41,6 +41,10 @@
     font-weight: bold;
 }
 
+.form-error {
+    color:red;
+}
+
 body {
     background-color: black;
 }
