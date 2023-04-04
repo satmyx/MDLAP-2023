@@ -24,9 +24,9 @@ class InscriptionController extends AbstractController
         $form->handleRequest($request);
         
         // Ne pas oublier de modif quand la features security est mise en place
-        //$licencie = $api->getLicencies(16890512079);
+        $licencie = $api->getLicencies(16890512079);
         
-        //$qualite = $api->getQualite($licencie[0]['idqualite']);
+        $qualite = $api->getQualite($licencie[0]['idqualite']);
 
         if($form->isSubmitted() && $form->isValid()) {
 
@@ -44,16 +44,15 @@ class InscriptionController extends AbstractController
 
         return $this->render('inscription/index.html.twig', [
             'form' => $form->createview(),
-            'test' => $form->get('loger')->getData(),
-            //'nomlicencie' => $licencie[0]['nom'],
-            //'prenomlicencie' => $licencie[0]['prenom'],
-            //'numerolicence' => $licencie[0]['numlicence'],
-            //'adresse1' => $licencie[0]['adresse1'],
-            //'cp' => $licencie[0]['cp'],
-            //'ville' => $licencie[0]['ville'],
-            //'tel' => $licencie[0]['tel'],
-            //'mail' => $licencie[0]['mail'],
-            //'qualite' => $qualite['libellequalite']
+            'nomlicencie' => $licencie[0]['nom'],
+            'prenomlicencie' => $licencie[0]['prenom'],
+            'numerolicence' => $licencie[0]['numlicence'],
+            'adresse1' => $licencie[0]['adresse1'],
+            'cp' => $licencie[0]['cp'],
+            'ville' => $licencie[0]['ville'],
+            'tel' => $licencie[0]['tel'],
+            'mail' => $licencie[0]['mail'],
+            'qualite' => $qualite['libellequalite']
         ]);
     }
 }
