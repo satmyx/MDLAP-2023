@@ -32,7 +32,7 @@ class CallApiService
             'http://apimdl/api/qualites/'.$idqualite
         );
 
-        return $response->toArray()['hydra:member'];
+        return $response->toArray();
     }
     /**
     * Permet de récupérer la liste des licenciés
