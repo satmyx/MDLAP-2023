@@ -9,13 +9,14 @@
 {% block body %}
     <h1 class="text-center text-warning">Le congrès de la fédération française d'escrime</h1>
     <h3 class="text-center text-decoration-underline">du 16 Septembre 2023 au 17 Septembre 2023</h3>
+    <h3 class="mt-5"></h3>
     <h3 style="margin-left: 50px;">les ateliers:</h3>
-    <div class="container">
+    <div class="container-lg bg-warning bg-opacity-10">
         {% for atelier in ateliers %}
             {% if loop.index0 % 3 == 0 %}
                 <div class="row">
                 {% endif %}
-                <div class="col-md-4 border">
+                <div class="col-md-4 border border-warning">
                     <div class="item">
                         <h5>{{ atelier.libelle }} :</h5>
                         <p>Nombres de places : {{ atelier.nbplaces }}</p>

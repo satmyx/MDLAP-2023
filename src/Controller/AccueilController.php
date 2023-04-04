@@ -21,11 +21,7 @@ class AccueilController extends AbstractController
             HotelRepository $hotelRepo, ManagerRegistry $doctrine): Response
     {
         $datecongres = 'uneDate';
-//        $ateliers = $doctrine->getRepository(Atelier::class)->findAteliers($doctrine);
         $ateliers= $atelierRepo->findAll(); //->findAll();
-        dump($ateliers);
-//        $ateliersNom = $ateliers->getLibelle();
-//        $ateliersNbPlaces = $ateliers->getNbPlaces();
         $themes = $themeRepo->findAll();
         $vacation = $vacRepo->findAll();
         $hotels = $hotelRepo->findAll();
@@ -34,8 +30,6 @@ class AccueilController extends AbstractController
         return $this->render('accueil/index.html.twig', [
             'dateCongres' => $datecongres,
             'ateliers'=> $ateliers,
-//            'ateliersNom'=> $ateliersNom,
-//            'ateliersPlaces'=> $ateliersNbPlaces,
             'themes' => $themes,
             'vacations' => $vacation,
             'hotels' => $hotels,
