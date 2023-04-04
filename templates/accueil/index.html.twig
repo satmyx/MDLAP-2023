@@ -7,31 +7,30 @@
 {% endblock %}
 
 {% block body %}
-    <div>
-        <p>dates du congrès : {{ dateCongres }}</p>
-        <p>les ateliers :
+    <h1 class="text-center text-warning">Le congrès de la fédération française d'escrime</h1>
+    <h3 class="text-center text-decoration-underline">du 16 Septembre 2023 au 17 Septembre 2023</h3>
+    <h3 style="margin-left: 50px;">les ateliers:</h3>
+    <div class="container">
         {% for atelier in ateliers %}
-            {{ atelier.libelle }} {{ atelier.nbplaces }}, 
+            {% if loop.index0 % 3 == 0 %}
+                <div class="row">
+                {% endif %}
+                <div class="col-md-4 border">
+                    <div class="item">
+                        <h5>{{ atelier.libelle }} :</h5>
+                        <p>Nombres de places : {{ atelier.nbplaces }}</p>
+                        <p>Thèmes:</p>
+                    </div>
+                </div>
+                {% if loop.index0 % 3 == 2 or loop.last %}
+                </div>
+            {% endif %}
         {% endfor %}
-        </p>
-        <p>les thèmes :
-        {% for theme in themes %}
-            {{ theme.libelle }},
-        {% endfor %}
-        </p>
-        <p>les vacations : {% for vacation in vacations %}
-            starts at:{{ vacation.dateHeureDebut|date('d/m/Y G:i') }}, ends at:{{ vacation.dateHeureFin|date('d/m/Y G:i') }},
-        {% endfor %}
-        </p>
-        <p>les hotels : {% for hotel in hotels %}
-            {{ hotel.nom }}, {{ hotel.adresse }}, {{ hotel.cp }}, {{ hotel.ville }}, {{ hotel.mail }}
-        {% endfor %}
-        </p>
     </div>
 {% endblock %}
 
 {% block footer %}
-{#    {% include '/HTMLelements/footer.html.twig' %}#}
-{# footer not sticky to bottom#}
+    {#    {% include '/HTMLelements/footer.html.twig' %}#}
+    {# footer not sticky to bottom#}
 {% endblock %}
 
