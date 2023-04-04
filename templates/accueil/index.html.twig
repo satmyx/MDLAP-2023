@@ -11,7 +11,7 @@
         <p>dates du congrès : {{ dateCongres }}</p>
         <p>les ateliers :
         {% for atelier in ateliers %}
-            {{ atelier.libelle }}
+            {{ atelier.libelle }} {{ atelier.nbplaces }}, 
         {% endfor %}
         </p>
         <p>les thèmes :

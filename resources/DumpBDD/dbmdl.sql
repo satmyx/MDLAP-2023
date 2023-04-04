@@ -19,7 +19,7 @@ INSERT INTO `hotel` (`id`, `nom`, `adresse`, `cp`, `ville`, `tel`, `mail`) VALUE
 -- Déchargement des données de la table `chambre`
 --
 
-INSERT INTO `chambre` (`id`, `apartenir_id`, `libelle`, `tarifs_nuites`) VALUES
+INSERT INTO `chambre` (`id`, `hotel_id`, `libelle`, `tarif_nuites`) VALUES
 (1, 1, 'Single du 13 au 14/09', '61.20'),
 (2, 1, 'Twin du 13 au 14/09', '62.20'),
 (3, 2, 'Single du 13 au 14/09', '112.00'),
@@ -63,7 +63,7 @@ INSERT INTO `theme` (`id`, `libelle`) VALUES
 -- Déchargement des données de la table `atelier`
 --
 
-INSERT INTO `atelier` (`id`, `thematique_id`, `vacation_id`, `libelle`, `nbplaces`) VALUES
+INSERT INTO `atelier` (`id`, `theme_id`, `vacation_id`, `libelle`, `nb_places`) VALUES
 (1, 1, 1, 'Le club et son projet', 10),
 (2, 2, 2, 'Fonctionnement du club', 6),
 (3, 3, 3, 'Les outils mis à disposition et remis aux clubs', 5),
