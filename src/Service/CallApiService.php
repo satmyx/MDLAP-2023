@@ -45,14 +45,4 @@ class CallApiService
 
         return $response->toArray()['hydra:member'];
     }
-    
-    public function getQualite($idqualite) {
-        $response = $this->client->request(
-            'GET',
-            'http://apimdl/api/qualites/'.$idqualite
-        );
-
-        return $response->toArray();
-    }
-
 }
