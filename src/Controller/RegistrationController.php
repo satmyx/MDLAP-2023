@@ -49,7 +49,7 @@ class RegistrationController extends AbstractController
 
             // TODO Appel du repository : UserRepository::VerifNumeroLicence($user);
             $entreeUtilisateurNumLicence = $user->getNumlicence();
-            $appelApiNumLicence = $api->getLicencies($entreeUtilisateurNumLicence); // 16360514319 = numéro valide
+            $appelApiNumLicence = $api->getLicencies($entreeUtilisateurNumLicence); // 16360514319, 16381117915, 16790322264 = numéros valides
             $numeroLicenceApiExiste = isset($appelApiNumLicence[0]['numlicence']);
             
             // $regex = 11 Chiffres où le premier n'est pas un 0
