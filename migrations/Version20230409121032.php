@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20230409114801 extends AbstractMigration
+final class Version20230409121032 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -28,12 +28,12 @@ final class Version20230409114801 extends AbstractMigration
         $this->addSql('CREATE TABLE inscription_restauration (inscription_id INT NOT NULL, restauration_id INT NOT NULL, INDEX IDX_FAFBDB85DAC5993 (inscription_id), INDEX IDX_FAFBDB87C6CB929 (restauration_id), PRIMARY KEY(inscription_id, restauration_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE restauration (id INT AUTO_INCREMENT NOT NULL, date_restauration DATETIME NOT NULL, libelle VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE theme (id INT AUTO_INCREMENT NOT NULL, libelle VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE `user` (id INT AUTO_INCREMENT NOT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, numlicence VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_8D93D6495DB85673 (numlicence), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, email VARCHAR(180) NOT NULL, roles JSON NOT NULL, password VARCHAR(255) NOT NULL, numlicence VARCHAR(255) NOT NULL, isVerified TINYINT(1) NOT NULL, UNIQUE INDEX UNIQ_8D93D6495DB85673 (numlicence), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE vacation (id INT AUTO_INCREMENT NOT NULL, date_heure_debut DATETIME NOT NULL, date_heure_fin DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE atelier ADD CONSTRAINT FK_E1BB1823476556AF FOREIGN KEY (thematique_id) REFERENCES theme (id)');
         $this->addSql('ALTER TABLE atelier ADD CONSTRAINT FK_E1BB182354DD8D72 FOREIGN KEY (vacation_id) REFERENCES vacation (id)');
         $this->addSql('ALTER TABLE chambre ADD CONSTRAINT FK_C509E4FFD90EC3ED FOREIGN KEY (apartenir_id) REFERENCES hotel (id)');
-        $this->addSql('ALTER TABLE inscription ADD CONSTRAINT FK_5E90F6D6B56DCD74 FOREIGN KEY (licencie_id) REFERENCES `user` (id)');
+        $this->addSql('ALTER TABLE inscription ADD CONSTRAINT FK_5E90F6D6B56DCD74 FOREIGN KEY (licencie_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE inscription ADD CONSTRAINT FK_5E90F6D6838DE57B FOREIGN KEY (loger_id) REFERENCES chambre (id)');
         $this->addSql('ALTER TABLE inscription_atelier ADD CONSTRAINT FK_C86AEECF5DAC5993 FOREIGN KEY (inscription_id) REFERENCES inscription (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE inscription_atelier ADD CONSTRAINT FK_C86AEECF82E2CF35 FOREIGN KEY (atelier_id) REFERENCES atelier (id) ON DELETE CASCADE');
@@ -61,7 +61,7 @@ final class Version20230409114801 extends AbstractMigration
         $this->addSql('DROP TABLE inscription_restauration');
         $this->addSql('DROP TABLE restauration');
         $this->addSql('DROP TABLE theme');
-        $this->addSql('DROP TABLE `user`');
+        $this->addSql('DROP TABLE user');
         $this->addSql('DROP TABLE vacation');
     }
 }

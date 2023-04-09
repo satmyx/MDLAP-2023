@@ -10,10 +10,10 @@
                 <h1>Création de votre compte licencié</h1> <br>
                 <h3>
                     {{ form_start(registrationForm) }}
-                    {{ form_row(registrationForm.numlicence, {'label' : 'Votre numéro de licence : '}) }} <br>
-                    {{ form_row(registrationForm.email, {'label' : 'Votre adresse email : '}) }} <br>
-                    {{ form_row(registrationForm.plainPassword) }} <br>
-                    <br> <button type="submit" class="btn btn-warning" id="bouttonEnregistrement">S'enregistrer</button>
+                    {{ form_row(registrationForm.numlicence, {'label' : 'Votre numéro de licence : '}) }}
+                    {{ form_row(registrationForm.email, {'label' : 'Votre adresse email : '}) }}
+                    {{ form_row(registrationForm.plainPassword) }}
+                    <button type="submit" class="btn btn-warning" id="bouttonEnregistrement">S'enregistrer</button>
                     {{ form_end(registrationForm) }}
                 </h3>
             </div>

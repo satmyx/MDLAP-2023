@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class InscriptionController extends AbstractController
 {
@@ -24,7 +25,7 @@ class InscriptionController extends AbstractController
         $form->handleRequest($request);
         
         // Ne pas oublier de modif quand la features security est mise en place
-        $licencie = $api->getLicencies(16890512079);
+        $licencie = $api->getLicencies($this->getUser()->getNumlicence());
         
         $qualite = $api->getQualite($licencie[0]['idqualite']);
 
@@ -38,7 +39,7 @@ class InscriptionController extends AbstractController
 
             $manager->flush();
 
-            return $this->redirectToRoute('app_somewhere');
+            return $this->redirectToRoute('app_user');
         }
 
 
