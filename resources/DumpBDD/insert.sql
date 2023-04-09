@@ -35,3 +35,8 @@ INSERT INTO `chambre` (`id`, `apartenir_id`, `libelle`, `tarifs_nuites`) VALUES
 (6, 1, 'Twin du 14 au 15/09', '62.20'),
 (7, 2, 'Single du 14 au 15/09', '112.00'),
 (8, 2, 'Double du 14 au 15/09', '122.00');
+
+INSERT INTO `restauration` (`id`, `date_restauration`, `libelle`) VALUES
+(1, '2023-04-01 14:54:19', 'Samedi : Dîner'),
+(2, '2023-04-09 14:54:19', 'Samedi : Déjeuner'),
+(3, '2023-04-09 14:54:19', 'Dimanche : Déjeuner');

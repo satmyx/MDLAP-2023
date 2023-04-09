@@ -1,32 +1,73 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Validation de l'inscription{% endblock %}
+{% block title %}Validation de l'inscription
+{% endblock %}
 
 {% block body %}
 
-    <div class="container">
-        <h1 class="text-center text-warning p-2">Validation de votre inscription au congrés</h1>
-        <div class="row ">
+	<div class="container">
+		<h1 class="text-center text-warning p-2">Validation de votre inscription au congrés</h1>
+		<div class="row ">
 
-            <div class="col-lg-4 col-md-12">
-                <h5>Nom du Participant : </h5> <p>{{ nomlicencie }}</p>
-                <h5>Prénom : </h5> <p>{{ prenomlicencie }}</p>
-                <h5>Numéro de Licence : </h5> <p>{{ numerolicence }}</p>
-            </div>
+			<div class="col-lg-4 col-md-12">
+				<h5>Nom du Participant :</h5>
+				<p>{{ nomlicencie }}</p>
+				<h5>Prénom :</h5>
+				<p>{{ prenomlicencie }}</p>
+				<h5>Numéro de Licence :</h5>
+				<p>{{ numerolicence }}</p>
+			</div>
 
-            <div class="col-lg-4 col-md-6">
-                <h5>Ville : </h5> <p>{{ ville }}</p>
-                <h5>Adresse : </h5> <p>{{ adresse1 }}</p>
-                <h5>Code Postal : </h5> <p>{{ cp }}</p>
-            </div>
+			<div class="col-lg-4 col-md-6">
+				<h5>Ville :</h5>
+				<p>{{ ville }}</p>
+				<h5>Adresse :</h5>
+				<p>{{ adresse1 }}</p>
+				<h5>Code Postal :</h5>
+				<p>{{ cp }}</p>
+			</div>
 
-            <div class="col-lg-4 col-md-6">
-                <h5>Qualité : </h5> <p>{{ qualite }}</p>
-                <h5>Téléphone : </h5> <p>{{ tel }}</p>
-                <h5>Mail : </h5> <p>{{ mail }}</p>
-            </div>
-        </div>
-        <hr>
-        <a class="btn btn-warning" href="{{ path('app_validation_inscription') }}">Valider mon inscription</a>
-    </div>
+			<div class="col-lg-4 col-md-6">
+				<h5>Qualité :</h5>
+				<p>{{ qualite }}</p>
+				<h5>Téléphone :</h5>
+				<p>{{ tel }}</p>
+				<h5>Mail :</h5>
+				<p>{{ mail }}</p>
+			</div>
+		</div>
+		<hr>
+		<div class="container">
+			<div class="row gx-1 ">
+
+				<div class="col-lg-4 col-md-12">
+					<h5 class="text-center">Logement</h5>
+					<ul>
+						<li>{{ logementInscrit.libelle }}</li>
+					</ul>
+				</div>
+
+				<div class="col-lg-4 col-md-6">
+					<h5 class="text-center">Ateliers</h5>
+					<ul>
+						{% for atelier in listeAteliers %}
+							<li>{{ atelier|e }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+
+				<div class="col-lg-4 col-md-6">
+					<h5 class="text-center">Restaurations</h5>
+					<ul>
+						{% for restauration in listeDesRestaurations %}
+							<li>{{ restauration|e }}</li>
+						{% endfor %}
+					</ul>
+				</div>
+
+			</div>
+		</div>
+		<h5>Montant : {{ prixTotal }} €</h5>
+		<a class="btn btn-warning" href="{{ path('app_validation_inscription') }}">Valider mon inscription</a>
+	</div>
 {% endblock %}

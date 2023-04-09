@@ -33,7 +33,7 @@ class InscriptionType extends AbstractType
                 'expanded' => true,
             ))
             ->add('Enregistrer', SubmitType::class, array(
-                'attr' => ['class' => 'btn btn-warning', 'style' => 'color:purple;'],
+                'attr' => ['class' => 'btn btn-warning'],
             ));
     }
 

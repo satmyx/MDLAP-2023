@@ -25,7 +25,10 @@ class CallApiService
 
         return $response->toArray()['hydra:member'];
     }
-    
+
+    /**
+    * Permet de récupérer la qualité d'un licencié
+    */
     public function getQualite($idqualite) {
         $response = $this->client->request(
             'GET',
@@ -34,6 +37,7 @@ class CallApiService
 
         return $response->toArray();
     }
+
     /**
     * Permet de récupérer la liste des licenciés
     */
@@ -44,5 +48,14 @@ class CallApiService
         );
 
         return $response->toArray()['hydra:member'];
+    }
+
+    /**
+    * Permet de modifier l'email d'un licencié
+    */
+    public function patchEmail() {
+    /**
+     * Ajouter la fonction patch dans l'api
+     */
     }
 }

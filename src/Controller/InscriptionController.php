@@ -33,7 +33,9 @@ class InscriptionController extends AbstractController
 
             $newInscription->setDateInscription(new DateTime('now'));
 
-            //$newInscription->setLicencie();
+            $newInscription->setLicencie($this->getUser());
+
+            $this->getUser()->setInscription($newInscription);
 
             $manager->persist($newInscription);
 

@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
+use App\Entity\Inscription;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\UserRepository;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['numlicence'], message: 'Il existe déjà un compte ayant ce numéro de licence.')]
@@ -34,6 +35,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(name:'isVerified', type: 'boolean')]
     private $isVerified = false;
+
+    #[ORM\OneToOne(targetEntity: Inscription::class, cascade: ['persist', 'remove'], inversedBy: "licencie")]
+    private ?Inscription $inscriptions = null;
 
     public function getId(): ?int
     {
@@ -151,5 +155,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __toString()
     {
         return $this->email;
+    }
+
+    public function getInscription(): ?Inscription
+    {
+        return $this->inscriptions;
+    }
+
+    public function setInscription(?Inscription $inscriptions): self
+    {
+        $this->inscriptions = $inscriptions;
+
+        return $this;
     }
 }
