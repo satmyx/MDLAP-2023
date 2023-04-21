@@ -22,7 +22,7 @@ class AccueilController extends AbstractController
     {
         $datecongres = 'uneDate';
         $ateliers= $atelierRepo->findAll(); //->findAll();
-        $themes = $themeRepo->findAll();
+        $themes = $themeRepo->getThemeLibelleByAtelier();
         $vacation = $vacRepo->findAll();
         $hotels = $hotelRepo->findAll();
         

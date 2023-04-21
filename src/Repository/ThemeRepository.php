@@ -38,6 +38,15 @@ class ThemeRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+    
+    public function getThemeLibelleByAtelier(ManagerRegistry $doctrine, $idAtelier)
+    {
+        $manager = $doctrine->getManager();
+        $sql = "select theme.libelle from theme where theme.atelier_id= :unAtelier";
+        $statment = $manager->getConnection()->prepare($sql);
+        $result = $statment->executeQuery(['unAtelier'=>$idAtelier]);
+        return $result->fetchAll();
+    }
 
 //    /**
 //     * @return Theme[] Returns an array of Theme objects

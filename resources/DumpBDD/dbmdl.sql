@@ -46,29 +46,60 @@ INSERT INTO `vacation` (`id`, `date_heure_debut`, `date_heure_fin`) VALUES
 -- --------------------------------------------------------
 
 --
--- Déchargement des données de la table `theme`
+-- Déchargement des données de la table `atelier`
 --
 
-INSERT INTO `theme` (`id`, `libelle`) VALUES
-(1, 'Le club et son projet'),
-(2, 'Fonctionnement du club'),
-(3, 'Les outils à disposition et remis aux clubs'),
-(4, 'Observatoire des métiers'),
-(5, 'IFFE'),
-(6, 'Développement durable');
+INSERT INTO `atelier` (`id`, `vacation_id`, `libelle`, `nb_places`) VALUES
+(1, 1, 'Le club et son projet', 10),
+(2, 2, 'Fonctionnement du club', 6),
+(3, 3, 'Les outils mis à disposition et remis aux clubs', 5),
+(4, 4, 'Observatoire des métiers', 50),
+(5, 5, 'IFFE', 12),
+(6, 6, 'Développement durable', 8);
 
 -- --------------------------------------------------------
 
 --
--- Déchargement des données de la table `atelier`
+-- Déchargement des données de la table `theme`
 --
 
-INSERT INTO `atelier` (`id`, `theme_id`, `vacation_id`, `libelle`, `nb_places`) VALUES
-(1, 1, 1, 'Le club et son projet', 10),
-(2, 2, 2, 'Fonctionnement du club', 6),
-(3, 3, 3, 'Les outils mis à disposition et remis aux clubs', 5),
-(4, 4, 4, 'Observatoire des métiers', 50),
-(5, 5, 5, 'IFFE', 12),
-(6, 6, 6, 'Développement durable', 8);
+INSERT INTO `theme` (`id`, `libelle`,`atelier_id`) VALUES
+(1, 'Diagnostic et identification des criteres du club', 1),
+(2, 'Analyse systemique de l environnement et méthodologie de mise en oeuvre du projet', 1),
+(3, 'Actions solidaires et innovantes',1),
+(4, 'Financements',1),
+(5, 'Outils et documentation',1),
+(6, 'Valoriser et communiquer sur le projet',1),
+
+(7, 'Creation - Obligations legales', 2),
+(8, 'Gestion du personnel, de la structure et des conflits', 2),
+(9, 'Relations internes, externes et avec le Comite Départemental, la Ligue et la Federation',2),
+(10, 'Conventions',2),
+(11, 'Partenariats',2),
+(12, 'Valoriser et communiquer sur le projet',2),
+
+(13, 'Logiciel FFE de gestion des compétitions', 3),
+(14, 'Présentation du document l arbitrage en images', 3),
+(15, 'Plaquette guide projet du club',3),
+(16, 'Labeliisation du club',3),
+(17, 'Aménagements des équipements',3),
+(18, 'Assurances',3),
+
+(19, 'Obervations et analyses sur l encadrement actuel', 4),
+(20, 'Propositions de nouveaux schémas d organisation', 4),
+(21, 'Profils types et pratiques innovantes',4),
+(22, 'Critères et seuils nécessaires à la pérennité de l emploi',4),
+(23, 'Exercice du métier d enseignant (avantages et inconvenients)',4),
+
+(24, 'Présentation', 5),
+(25, 'Fonctionnement', 5),
+(26, 'Objectifs',5),
+(27, 'Nouveaux diplomes',5),
+(28, 'Financements',5),
+
+(29, 'Les enjeux climatiques, énergétiques et économiques', 6),
+(30, 'Sport et developpement durable', 6),
+(31, 'Demarche federale',6),
+(32, 'Echange',6);
 
 COMMIT;

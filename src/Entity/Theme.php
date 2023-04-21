@@ -18,13 +18,10 @@ class Theme
     #[ORM\Column(length: 255)]
     private ?string $libelle = null;
 
-    #[ORM\OneToMany(mappedBy: 'theme', targetEntity: Atelier::class)]
-    private Collection $ateliers;
+    #[ORM\ManyToOne(inversedBy: 'themes')]
+    private ?Atelier $atelier = null;
 
-    public function __construct()
-    {
-        $this->ateliers = new ArrayCollection();
-    }
+
 
     public function getId(): ?int
     {
@@ -43,33 +40,16 @@ class Theme
         return $this;
     }
 
-    /**
-     * @return Collection<int, Atelier>
-     */
-    public function getAteliers(): Collection
+    public function getAtelier(): ?Atelier
     {
-        return $this->ateliers;
+        return $this->atelier;
     }
 
-    public function addAtelier(Atelier $atelier): self
+    public function setAtelier(?Atelier $atelier): self
     {
-        if (!$this->ateliers->contains($atelier)) {
-            $this->ateliers->add($atelier);
-            $atelier->setTheme($this);
-        }
+        $this->atelier = $atelier;
 
         return $this;
     }
 
-    public function removeAtelier(Atelier $atelier): self
-    {
-        if ($this->ateliers->removeElement($atelier)) {
-            // set the owning side to null (unless already changed)
-            if ($atelier->getTheme() === $this) {
-                $atelier->setTheme(null);
-            }
-        }
-
-        return $this;
-    }
 }

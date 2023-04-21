@@ -20,7 +20,11 @@
                     <div class="item">
                         <h5>{{ atelier.libelle }} :</h5>
                         <p>Nombres de places : {{ atelier.nbplaces }}</p>
-                        <p>Thèmes:</p>
+                        {% for theme in themes %}
+                            {% if theme.atelier_id== atelier.id%}
+                                <p>Thèmes:{{ theme.libelle }}</p>
+                            {% endif %}
+                        {% endfor %}
                     </div>
                 </div>
                 {% if loop.index0 % 3 == 2 or loop.last %}
