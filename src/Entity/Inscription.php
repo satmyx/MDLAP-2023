@@ -38,6 +38,10 @@ class Inscription
     #[ORM\ManyToOne(inversedBy: 'inscriptions')]
     private ?Chambre $loger = null;
 
+    #[ORM\ManyToOne(inversedBy: 'inscriptions')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Etat $etat = null;
+
     public function __construct()
     {
         $this->atelierInscrit = new ArrayCollection();
@@ -129,6 +133,18 @@ class Inscription
     public function setLoger(?Chambre $loger): self
     {
         $this->loger = $loger;
+
+        return $this;
+    }
+
+    public function getEtat(): ?Etat
+    {
+        return $this->etat;
+    }
+
+    public function setEtat(?Etat $etat): self
+    {
+        $this->etat = $etat;
 
         return $this;
     }

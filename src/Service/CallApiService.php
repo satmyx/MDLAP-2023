@@ -3,9 +3,11 @@
 namespace App\Service;
 
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 //use Symfony\Component\Security\Core\User\UserInterface;
 
-class CallApiService
+class CallApiService extends AbstractController
 {
     private $client;
 
@@ -20,7 +22,7 @@ class CallApiService
     public function getLicenciesPerso($numlicencie) {
         $response = $this->client->request(
             'GET',
-            'http://apimdl/api/licencies?numlicence='.$numlicencie
+            $this->getParameter('API_URL').'licencies?numlicence='.$numlicencie
         );
 
         return $response->toArray()['hydra:member'];
@@ -32,7 +34,7 @@ class CallApiService
     public function getQualite($idqualite) {
         $response = $this->client->request(
             'GET',
-            'http://apimdl/api/qualites/'.$idqualite
+            $this->getParameter('API_URL').'qualites/'.$idqualite
         );
 
         return $response->toArray();
@@ -44,7 +46,7 @@ class CallApiService
     public function getLicencies($numlicencie) {
         $response = $this->client->request(
             'GET',
-            'http://apimdl/api/licencies?numlicence='.$numlicencie
+            $this->getParameter('API_URL').'licencies?numlicence='.$numlicencie
         );
 
         return $response->toArray()['hydra:member'];

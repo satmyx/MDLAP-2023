@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use DateTime;
+use App\Entity\Etat;
 use App\Entity\Inscription;
 use App\Form\InscriptionType;
 use App\Service\CallApiService;
@@ -13,10 +14,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mime\Address;
+
 class InscriptionController extends AbstractController
 {
     #[Route('/inscription', name: 'app_inscription')]
-    public function index(EntityManagerInterface $manager, Request $request, CallApiService $api): Response
+    public function index(MailerInterface $mailer, EntityManagerInterface $manager, Request $request, CallApiService $api): Response
     {
         $newInscription = new Inscription();
 
@@ -24,7 +29,6 @@ class InscriptionController extends AbstractController
 
         $form->handleRequest($request);
         
-        // Ne pas oublier de modif quand la features security est mise en place
         $licencie = $api->getLicencies($this->getUser()->getNumlicence());
         
         $qualite = $api->getQualite($licencie[0]['idqualite']);
@@ -35,11 +39,45 @@ class InscriptionController extends AbstractController
 
             $newInscription->setLicencie($this->getUser());
 
+            $etat = $manager->getRepository(Etat::class)->find(1);
+
+            $newInscription->setEtat($etat);
+
             $this->getUser()->setInscription($newInscription);
 
             $manager->persist($newInscription);
 
             $manager->flush();
+
+
+            // Récupération des infos pour l'envoie du mail.
+
+            $prixTotal = 100+35*count($newInscription->getRestaurer())+$newInscription->getLoger()->getTarifsNuites();
+    
+            $listeDesAteliers = array();
+    
+            $listeDesRestaurations = array();
+    
+            foreach ($newInscription->getAtelierInscrit() as $key => $value) {
+                array_push($listeDesAteliers, $value->getLibelle());
+            }
+            foreach ($newInscription->getRestaurer() as $key => $value) {
+                array_push($listeDesRestaurations, $value->getLibelle());
+            }
+
+            $email = (new TemplatedEmail())
+            ->from(new Address('mailer@mailer.de', 'mailer boot'))
+            ->to($this->getUser()->getEmail())
+            ->subject('Maison des ligues - Attente de validation de votre inscription !')
+            ->htmlTemplate('inscription/attente.html.twig')
+            ->context([
+                'prixTotal' => $prixTotal,
+                'listeDesAteliers' => $listeDesAteliers,
+                'listeDesRestaurations' => $listeDesRestaurations,
+                'logementInscrit' => $newInscription->getLoger(),
+            ]);
+
+            $mailer->send($email);
 
             return $this->redirectToRoute('app_user');
         }

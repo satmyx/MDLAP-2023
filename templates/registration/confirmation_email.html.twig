@@ -1,11 +1,9 @@
-<h1>Maison des ligues confirmation email</h1>
+{% extends 'base.html.twig' %}
 
-<p>
-    Merci de confirmer votre adresse email en cliquant sur ce lien : <br><br>
-    <a href="{{ signedUrl|raw }}">Confirmer mon Email</a>.
-    Ce lien expire dans ... {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.
-</p>
+{% block body %}
+	<h1>Maison des ligues confirmation email</h1>
 
-<p>
-    Bonne journée.
-</p>
+	<p>Merci de confirmer votre adresse email en cliquant sur ce lien :<br><br><a href="{{ signedUrl|raw }}">Confirmer mon Email</a>.Ce lien expire dans ...{{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.</p>
+
+	<p>Bonne journée.</p>
+{% endblock body %}

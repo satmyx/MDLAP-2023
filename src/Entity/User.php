@@ -36,7 +36,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name:'isVerified', type: 'boolean')]
     private $isVerified = false;
 
-    #[ORM\OneToOne(targetEntity: Inscription::class, cascade: ['persist', 'remove'], inversedBy: "licencie")]
+    #[ORM\OneToOne(targetEntity: Inscription::class, cascade: ['persist', 'remove'], mappedBy: "licencie")]
     private ?Inscription $inscriptions = null;
 
     public function getId(): ?int
