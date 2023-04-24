@@ -5,6 +5,12 @@
 
 {% block body %}
 
+	{% for message in app.flashes('error') %}
+		<div class="alert alert-warning fw-bolder text-center">
+			{{ message }}
+		</div>
+    {% endfor %}
+
     <div class="container">
         <h1 class="text-center text-warning p-2">Inscription au congrés</h1>
         <div class="row ">

@@ -23,6 +23,7 @@ class InscriptionController extends AbstractController
     #[Route('/inscription', name: 'app_inscription')]
     public function index(MailerInterface $mailer, EntityManagerInterface $manager, Request $request, CallApiService $api): Response
     {
+        // Récupération des informations
         $newInscription = new Inscription();
 
         $form = $this->createForm(InscriptionType::class, $newInscription);
@@ -43,43 +44,65 @@ class InscriptionController extends AbstractController
 
             $newInscription->setEtat($etat);
 
-            $this->getUser()->setInscription($newInscription);
-
-            $manager->persist($newInscription);
-
-            $manager->flush();
-
-
-            // Récupération des infos pour l'envoie du mail.
-
-            $prixTotal = 100+35*count($newInscription->getRestaurer())+$newInscription->getLoger()->getTarifsNuites();
-    
             $listeDesAteliers = array();
     
             $listeDesRestaurations = array();
+
+            $validiteAteliers = array();
     
             foreach ($newInscription->getAtelierInscrit() as $key => $value) {
                 array_push($listeDesAteliers, $value->getLibelle());
+                // Récupération du nombre de places par ateliers.
+                $nbplaces = $manager->getRepository(Inscription::class)->getNbAtelier($value->getId());
+                // Vérification si un atelier a encore de la place.
+                if($nbplaces[0]['nbplaces'] < $value->getNbplaces()) {
+                    array_push($validiteAteliers, true);
+                } else {
+                    array_push($validiteAteliers, false);
+                }
             }
             foreach ($newInscription->getRestaurer() as $key => $value) {
                 array_push($listeDesRestaurations, $value->getLibelle());
             }
 
-            $email = (new TemplatedEmail())
-            ->from(new Address('mailer@mailer.de', 'mailer boot'))
-            ->to($this->getUser()->getEmail())
-            ->subject('Maison des ligues - Attente de validation de votre inscription !')
-            ->htmlTemplate('inscription/attente.html.twig')
-            ->context([
-                'prixTotal' => $prixTotal,
-                'listeDesAteliers' => $listeDesAteliers,
-                'listeDesRestaurations' => $listeDesRestaurations,
-                'logementInscrit' => $newInscription->getLoger(),
-            ]);
 
-            $mailer->send($email);
+            if (in_array(false, $validiteAteliers)){
+                $validite = false;
+            } else {
+                $validite = true;
+            }
 
-            return $this->redirectToRoute('app_user');
+            // Récupération des infos pour l'envoie du mail.
+            $prixTotal = 100+35*count($newInscription->getRestaurer())+$newInscription->getLoger()->getTarifsNuites();
+
+            if ($validite == true ) {
+
+                $email = (new TemplatedEmail())
+                ->from(new Address('mailer@mailer.de', 'mailer boot'))
+                ->to($this->getUser()->getEmail())
+                ->subject('Maison des ligues - Attente de validation de votre inscription !')
+                ->htmlTemplate('inscription/attente.html.twig')
+                ->context([
+                    'prixTotal' => $prixTotal,
+                    'listeDesAteliers' => $listeDesAteliers,
+                    'listeDesRestaurations' => $listeDesRestaurations,
+                    'logementInscrit' => $newInscription->getLoger(),
+                ]);
+    
+                $mailer->send($email);
+    
+                $this->getUser()->setInscription($newInscription);
+    
+                $manager->persist($newInscription);
+    
+                $manager->flush();
+    
+                return $this->redirectToRoute('app_user');
+
+            } else {
+                $this->addFlash('error', "L'un des ateliers est complet veuillez en choisir un autre");
+            }
+
         }
 
 

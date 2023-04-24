@@ -2,10 +2,16 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Etat;
+use App\Service\CallApiService;
+use Symfony\Component\Mime\Address;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Service\CallApiService;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class ValidationInscriptionController extends AbstractController
@@ -54,5 +60,54 @@ class ValidationInscriptionController extends AbstractController
             'listeDesRestaurations' => $listeDesRestaurations,
             'prixTotal' => $prixTotal,
         ]);
+    }
+
+    #[Route('/validationetat', name: 'app_validation_inscription_etat')]
+    public function validationInscription(MailerInterface $mailer, EntityManagerInterface $manager): Response
+    {
+        // Récupération des informations
+        $inscription = $this->getUser()->getInscription();
+
+        $logementInscrit = $inscription->getLoger();
+
+        $atelierInscrit = $inscription->getAtelierInscrit();
+
+        $restaurationInscrit = $inscription->getRestaurer();
+
+        $listeDesAteliers = array();
+
+        $listeDesRestaurations = array();
+
+        // Passage vers l'état valider
+        $etat = $manager->getRepository(Etat::class)->find(2);
+
+        $inscription->setEtat($etat);
+
+        foreach ($atelierInscrit as $key => $value) {
+            array_push($listeDesAteliers, $value->getLibelle());
+        }
+        foreach ($restaurationInscrit as $key => $value) {
+            array_push($listeDesRestaurations, $value->getLibelle());
+        }
+
+        $manager->flush();
+
+        $prixTotal = 100+35*count($restaurationInscrit)+$logementInscrit->getTarifsNuites();
+        
+        $email = (new TemplatedEmail())
+        ->from(new Address('mailer@mailer.de', 'mailer boot'))
+        ->to($this->getUser()->getEmail())
+        ->subject('Maison des ligues - Votre inscription a était valider')
+        ->htmlTemplate('inscription/validation.html.twig')
+        ->context([
+            'prixTotal' => $prixTotal,
+            'listeDesAteliers' => $listeDesAteliers,
+            'listeDesRestaurations' => $listeDesRestaurations,
+            'logementInscrit' => $logementInscrit,
+        ]);
+
+        $mailer->send($email);
+
+        return $this->redirectToRoute('app_user');
     }
 }

@@ -39,6 +39,15 @@ class InscriptionRepository extends ServiceEntityRepository
         }
     }
 
+    public function getNbAtelier(int $id){
+        $conn = $this->getEntityManager()->getConnection();
+        $sql = "SELECT COUNT(*) as nbplaces FROM inscription_atelier
+        WHERE inscription_atelier.atelier_id = :id";
+        $statement = $conn->prepare($sql);
+        $result = $statement->executeQuery(['id' => $id]);
+        return $result->fetchAllAssociative();
+    }
+
 //    /**
 //     * @return Inscription[] Returns an array of Inscription objects
 //     */
