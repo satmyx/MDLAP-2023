@@ -26,7 +26,7 @@ class Atelier
     #[ORM\ManyToOne(inversedBy: 'ateliers')]
     private ?Vacation $vacation = null;
 
-    #[ORM\OneToMany(mappedBy: 'atelier', targetEntity: theme::class)]
+    #[ORM\OneToMany(mappedBy: 'atelier', targetEntity: Theme::class)]
     private Collection $themes;
 
     public function __construct()

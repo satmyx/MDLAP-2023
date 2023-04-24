@@ -20,10 +20,8 @@
                     <div class="item">
                         <h5>{{ atelier.libelle }} :</h5>
                         <p>Nombres de places : {{ atelier.nbplaces }}</p>
-                        {% for theme in themes %}
-                            {% if theme.atelier_id== atelier.id%}
-                                <p>Thèmes:{{ theme.libelle }}</p>
-                            {% endif %}
+                        {% for theme in themes|keys %}
+                                <p>Thèmes:{{ theme }}</p>
                         {% endfor %}
                     </div>
                 </div>

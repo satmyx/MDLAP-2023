@@ -39,13 +39,13 @@ class ThemeRepository extends ServiceEntityRepository
         }
     }
     
-    public function getThemeLibelleByAtelier(ManagerRegistry $doctrine, $idAtelier)
+    public function getThemeLibelleByAtelier($idAtelier)
     {
-        $manager = $doctrine->getManager();
+        $connexion = $this->getEntityManager()->getConnection();
         $sql = "select theme.libelle from theme where theme.atelier_id= :unAtelier";
-        $statment = $manager->getConnection()->prepare($sql);
+        $statment = $connexion->prepare($sql);
         $result = $statment->executeQuery(['unAtelier'=>$idAtelier]);
-        return $result->fetchAll();
+        return $result->fetchAllAssociative();
     }
 
 //    /**
