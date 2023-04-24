@@ -4,6 +4,13 @@
 {% endblock %}
 
 {% block body %}
+
+	{% for message in app.flashes('error') %}
+		<div class="alert alert-warning fw-bolder text-center">
+			{{ message }}
+		</div>
+    {% endfor %}
+
     <div class="container">
         <div class="row">
             <div class="bg-light mt-4 p-4" id="regForm">

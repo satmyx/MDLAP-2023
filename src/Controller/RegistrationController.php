@@ -28,20 +28,19 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, 
-            AppAuthenticator $authenticator, EntityManagerInterface $entityManager, CallApiService $api): Response
-    {
-	if ($this->getUser()) {
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, AppAuthenticator $authenticator, EntityManagerInterface $entityManager, CallApiService $api): Response {
+        
+        if ($this->getUser()) {
             return $this->redirectToRoute('app_user');
-	}
+        }
 
-	$user = new User();
+        $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setPassword(
-            $userPasswordHasher->hashPassword(
+                $userPasswordHasher->hashPassword(
                     $user,
                     $form->get('plainPassword')->getData()
                 )
@@ -51,40 +50,38 @@ class RegistrationController extends AbstractController
             $entreeUtilisateurNumLicence = $user->getNumlicence();
             $appelApiNumLicence = $api->getLicencies($entreeUtilisateurNumLicence); // 16360514319, 16381117915, 16790322264 = numéros valides
             $numeroLicenceApiExiste = isset($appelApiNumLicence[0]['numlicence']);
-            
+
             // $regex = 11 Chiffres où le premier n'est pas un 0
             $regex = '/^[1-9]\d{10}$/';
-            
+
             if ($numeroLicenceApiExiste) {
                 $numeroLicenceApi = $appelApiNumLicence[0]['numlicence'];
                 $controleEntreeUtilisateur = (bool) preg_match($regex, $entreeUtilisateurNumLicence);
                 $correspondanceEntreNumeros = ((int) $entreeUtilisateurNumLicence === $numeroLicenceApi);
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                // generate a signed url and email it to the user
+                $this->emailVerifier->sendEmailConfirmation(
+                    'app_verify_email',
+                    $user,
+                    (new TemplatedEmail())
+                        ->from(new Address('mailer@mailer.de', 'mailer boot'))
+                        ->to($user->getEmail())
+                        ->subject('Maison des ligues - Confirmer votre email !')
+                        ->htmlTemplate('registration/confirmation_email.html.twig')
+                );
+
+                return $userAuthenticator->authenticateUser(
+                    $user,
+                    $authenticator,
+                    $request
+                );
+                
             } else {
-                $this->addFlash('test', 'Numéro invalide');
+                $this->addFlash('error', 'Numéro de licence invalide');
             }
-            
-            if (!($numeroLicenceApiExiste) || !($controleEntreeUtilisateur) || !($correspondanceEntreNumeros)) {
-                $this->addFlash('test', 'Numéro invalide');
-            }
-            
-            $entityManager->persist($user);
-            $entityManager->flush();
 
-            // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
-                (new TemplatedEmail())
-                    ->from(new Address('mailer@mailer.de', 'mailer boot'))
-                    ->to($user->getEmail())
-                    ->subject('Maison des ligues - Confirmer votre email !')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-            );
-            // do anything else you need here, like send an email
-
-            return $userAuthenticator->authenticateUser(
-                $user,
-                $authenticator,
-                $request
-            );
         }
 
         return $this->render('registration/register.html.twig', [
@@ -107,12 +104,13 @@ class RegistrationController extends AbstractController
         }
 
         // @TODO Change the redirect on success and handle or remove the flash message in your templates
-        $this->addFlash('success', 'Your email address has been verified.');
+        $this->addFlash('success', 'Votre email a était vérifier.');
 
         return $this->redirectToRoute('app_login');
     }
-    
-    #[Route('/logout', name:'app_logout')]
-    public function logout() : void {}
-    
+
+    #[Route('/logout', name: 'app_logout')]
+    public function logout(): void
+    {
+    }
 }
