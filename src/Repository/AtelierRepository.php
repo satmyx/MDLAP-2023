@@ -38,6 +38,26 @@ class AtelierRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+    
+    
+    public function getEverythingAtelier()
+    {
+        $connexion = $this->getEntityManager()->getConnection();
+        $sql = "select * from atelier";
+        $statment = $connexion->prepare($sql);
+        $result = $statment->executeQuery();
+        return $result->fetchAllAssociative();
+    }
+    
+    
+//    public function findAteliers(ManagerRegistry $doctrine): array
+//    {
+//        $manager = $doctrine->getManager();
+//        $sql= "select a.libelle,a.nbplaces from atelier a";
+//        $result = $manager->getConnexion()->prepare($sql);
+//        $result->fetchAll();
+//        return $result;
+//    }
 
 //    /**
 //     * @return Atelier[] Returns an array of Atelier objects

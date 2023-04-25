@@ -19,20 +19,19 @@ class Atelier
     private ?string $libelle = null;
 
     #[ORM\Column]
-    private ?int $nbplaces = null;
+    private ?int $nbPlaces = null;
 
-    #[ORM\ManyToOne(inversedBy: 'ateliers')]
-    private ?Theme $thematique = null;
+
 
     #[ORM\ManyToOne(inversedBy: 'ateliers')]
     private ?Vacation $vacation = null;
 
-    #[ORM\ManyToMany(targetEntity: Inscription::class, mappedBy: 'atelierInscrit')]
-    private Collection $inscriptions;
+    #[ORM\OneToMany(mappedBy: 'atelier', targetEntity: Theme::class)]
+    private Collection $themes;
 
     public function __construct()
     {
-        $this->inscriptions = new ArrayCollection();
+        $this->themes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -52,29 +51,18 @@ class Atelier
         return $this;
     }
 
-    public function getNbplaces(): ?int
+    public function getNbPlaces(): ?int
     {
-        return $this->nbplaces;
+        return $this->nbPlaces;
     }
 
-    public function setNbplaces(int $nbplaces): self
+    public function setNbPlaces(int $nbPlaces): self
     {
-        $this->nbplaces = $nbplaces;
+        $this->nbPlaces = $nbPlaces;
 
         return $this;
     }
 
-    public function getThematique(): ?Theme
-    {
-        return $this->thematique;
-    }
-
-    public function setThematique(?Theme $thematique): self
-    {
-        $this->thematique = $thematique;
-
-        return $this;
-    }
 
     public function getVacation(): ?Vacation
     {
@@ -89,33 +77,36 @@ class Atelier
     }
 
     /**
-     * @return Collection<int, Inscription>
+     * @return Collection<int, theme>
      */
-    public function getInscriptions(): Collection
+    public function getThemes(): Collection
     {
-        return $this->inscriptions;
+        return $this->themes;
     }
 
-    public function addInscription(Inscription $inscription): self
+    public function addTheme(theme $theme): self
     {
-        if (!$this->inscriptions->contains($inscription)) {
-            $this->inscriptions->add($inscription);
-            $inscription->addAtelierInscrit($this);
+        if (!$this->themes->contains($theme)) {
+            $this->themes->add($theme);
+            $theme->setAtelier($this);
         }
 
         return $this;
     }
 
-    public function removeInscription(Inscription $inscription): self
+    public function removeTheme(theme $theme): self
     {
-        if ($this->inscriptions->removeElement($inscription)) {
-            $inscription->removeAtelierInscrit($this);
+        if ($this->themes->removeElement($theme)) {
+            // set the owning side to null (unless already changed)
+            if ($theme->getAtelier() === $this) {
+                $theme->setAtelier(null);
+            }
         }
 
         return $this;
     }
-
-    public function __toString() {
+    
+    public function __toString(){
         return $this->libelle;
     }
 }
