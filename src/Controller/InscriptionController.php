@@ -49,6 +49,16 @@ class InscriptionController extends AbstractController
             $listeDesRestaurations = array();
 
             $validiteAteliers = array();
+
+            // ID bénévole = 20
+            if($licencie[0]['idqualite'] == 20) {
+                $newInscription->setLoger(null);
+            }
+
+            // ID Animateur = 21
+            if($licencie[0]['idqualite'] == 21) {
+                $newInscription->setLoger(null);
+            }
     
             foreach ($newInscription->getAtelierInscrit() as $key => $value) {
                 array_push($listeDesAteliers, $value->getLibelle());
@@ -72,8 +82,14 @@ class InscriptionController extends AbstractController
                 $validite = true;
             }
 
-            // Récupération des infos pour l'envoie du mail.
-            $prixTotal = 100+35*count($newInscription->getRestaurer())+$newInscription->getLoger()->getTarifsNuites();
+            // Récupération du prix si bénévoles et animateurs.
+            if($licencie[0]['idqualite'] == 20) {
+                $prixTotal = 0;
+            } elseif($licencie[0]['idqualite'] == 21) {
+                $prixTotal = 0;
+            } else {
+                $prixTotal = 100+35*count($newInscription->getRestaurer())+$newInscription->getLoger()->getTarifsNuites();
+            }
 
             if ($validite == true ) {
 
@@ -87,6 +103,7 @@ class InscriptionController extends AbstractController
                     'listeDesAteliers' => $listeDesAteliers,
                     'listeDesRestaurations' => $listeDesRestaurations,
                     'logementInscrit' => $newInscription->getLoger(),
+                    'idqualite' => $licencie[0]['idqualite'],
                 ]);
     
                 $mailer->send($email);
@@ -97,7 +114,7 @@ class InscriptionController extends AbstractController
     
                 $manager->flush();
     
-                return $this->redirectToRoute('app_user');
+                return $this->redirectToRoute('app_accueil');
 
             } else {
                 $this->addFlash('error', "L'un des ateliers est complet veuillez en choisir un autre");
@@ -116,7 +133,8 @@ class InscriptionController extends AbstractController
             'ville' => $licencie[0]['ville'],
             'tel' => $licencie[0]['tel'],
             'mail' => $licencie[0]['mail'],
-            'qualite' => $qualite['libellequalite']
+            'qualite' => $qualite['libellequalite'],
+            'idqualite' => $licencie[0]['idqualite'],
         ]);
     }
 }

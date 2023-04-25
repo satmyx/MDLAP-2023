@@ -20,6 +20,13 @@ class ValidationInscriptionController extends AbstractController
     public function index(CallApiService $api): Response
     {
 
+        if ($this->getUser()->getInscription() == null) {
+            $this->addFlash('error', 'Aucune inscription présente sur ce compte');
+            return $this->redirectToRoute('app_accueil');
+        }
+
+        $licencie = $api->getLicencies($this->getUser()->getNumlicence());
+
         $inscription = $this->getUser()->getInscription();
 
         $logementInscrit = $inscription->getLoger();
@@ -39,12 +46,19 @@ class ValidationInscriptionController extends AbstractController
             array_push($listeDesRestaurations, $value->getLibelle());
         }
 
-        $prixTotal = 100+35*count($restaurationInscrit)+$logementInscrit->getTarifsNuites();
+        // Récupération du prix si bénévoles et animateurs.
+        if ($licencie[0]['idqualite'] == 20) {
+            $prixTotal = 0;
+        } elseif ($licencie[0]['idqualite'] == 21) {
+            $prixTotal = 0;
+        } else {
+            $prixTotal = 100 + 35 * count($newInscription->getRestaurer()) + $newInscription->getLoger()->getTarifsNuites();
+        }
 
         $licencie = $api->getLicencies($this->getUser()->getNumlicence());
-        
+
         $qualite = $api->getQualite($licencie[0]['idqualite']);
-        
+
         return $this->render('validation_inscription/index.html.twig', [
             'nomlicencie' => $licencie[0]['nom'],
             'prenomlicencie' => $licencie[0]['prenom'],
@@ -59,14 +73,17 @@ class ValidationInscriptionController extends AbstractController
             'logementInscrit' => $logementInscrit,
             'listeDesRestaurations' => $listeDesRestaurations,
             'prixTotal' => $prixTotal,
+            'idqualite' => $licencie[0]['idqualite'],
         ]);
     }
 
     #[Route('/validationetat', name: 'app_validation_inscription_etat')]
-    public function validationInscription(MailerInterface $mailer, EntityManagerInterface $manager): Response
+    public function validationInscription(MailerInterface $mailer, EntityManagerInterface $manager, CallApiService $api): Response
     {
         // Récupération des informations
         $inscription = $this->getUser()->getInscription();
+
+        $licencie = $api->getLicencies($this->getUser()->getNumlicence());
 
         $logementInscrit = $inscription->getLoger();
 
@@ -92,22 +109,30 @@ class ValidationInscriptionController extends AbstractController
 
         $manager->flush();
 
-        $prixTotal = 100+35*count($restaurationInscrit)+$logementInscrit->getTarifsNuites();
-        
+        // Récupération du prix si bénévoles et animateurs.
+        if ($licencie[0]['idqualite'] == 20) {
+            $prixTotal = 0;
+        } elseif ($licencie[0]['idqualite'] == 21) {
+            $prixTotal = 0;
+        } else {
+            $prixTotal = 100 + 35 * count($newInscription->getRestaurer()) + $newInscription->getLoger()->getTarifsNuites();
+        }
+
         $email = (new TemplatedEmail())
-        ->from(new Address('mailer@mailer.de', 'mailer boot'))
-        ->to($this->getUser()->getEmail())
-        ->subject('Maison des ligues - Votre inscription a était valider')
-        ->htmlTemplate('inscription/validation.html.twig')
-        ->context([
-            'prixTotal' => $prixTotal,
-            'listeDesAteliers' => $listeDesAteliers,
-            'listeDesRestaurations' => $listeDesRestaurations,
-            'logementInscrit' => $logementInscrit,
-        ]);
+            ->from(new Address('mailer@mailer.de', 'mailer boot'))
+            ->to($this->getUser()->getEmail())
+            ->subject('Maison des ligues - Votre inscription a était valider')
+            ->htmlTemplate('inscription/validation.html.twig')
+            ->context([
+                'prixTotal' => $prixTotal,
+                'listeDesAteliers' => $listeDesAteliers,
+                'listeDesRestaurations' => $listeDesRestaurations,
+                'logementInscrit' => $logementInscrit,
+                'idqualite' => $licencie[0]['idqualite'],
+            ]);
 
         $mailer->send($email);
 
-        return $this->redirectToRoute('app_user');
+        return $this->redirectToRoute('app_accueil');
     }
 }

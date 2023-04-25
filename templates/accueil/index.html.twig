@@ -7,8 +7,21 @@
 {% endblock %}
 
 {% block body %}
+
+	{% for message in app.flashes('error') %}
+		<div class="alert alert-warning fw-bolder text-center">
+			{{ message }}
+		</div>
+    {% endfor %}
+
+    	{% for message in app.flashes('success') %}
+		<div class="alert alert-success fw-bolder text-center">
+			{{ message }}
+		</div>
+    {% endfor %}
+
     <h1 class="text-center text-warning">Le congrès de la fédération française d'escrime</h1>
-    <h3 class="text-center text-decoration-underline">du 16 Septembre 2023 au 17 Septembre 2023</h3>
+    <h3 class="text-center text-decoration-underline">Du 16 Septembre 2023 au 17 Septembre 2023</h3>
     <h3 class="mt-5"></h3>
     <div class="container-lg bg-warning bg-opacity-10">
         {% for atelier in ateliers %}

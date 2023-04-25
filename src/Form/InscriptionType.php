@@ -31,6 +31,8 @@ class InscriptionType extends AbstractType
                 'class' => Chambre::class,
                 'multiple' => false,
                 'expanded' => true,
+                'required' => false,
+                'placeholder' => 'Aucun'
             ))
             ->add('Enregistrer', SubmitType::class, array(
                 'attr' => ['class' => 'btn btn-warning'],

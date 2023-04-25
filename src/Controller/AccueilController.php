@@ -12,11 +12,9 @@ use App\Repository\ChambreRepository;
 use App\Repository\HotelRepository;
 //use Doctrine\ORM\EntityManagerInterface;
 
-
-#[Route('/', name: 'Maison Des Ligues')]
 class AccueilController extends AbstractController
 {
-    #[Route('/')]
+    #[Route('/', name: 'app_accueil')]
     public function index(AtelierRepository $atelierRepo, ThemeRepository $themeRepo, VacationRepository $vacRepo,
             ChambreRepository $chambreRepo, HotelRepository $hotelRepo): Response
     {

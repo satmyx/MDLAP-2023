@@ -2,14 +2,21 @@
 
 namespace App\Controller\Admin;
 
-use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
-use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
+use App\Entity\Etat;
+use App\Entity\User;
+use App\Entity\Hotel;
+use App\Entity\Theme;
+use App\Entity\Nuites;
+use App\Entity\Atelier;
+use App\Entity\Chambre;
+use App\Entity\Vacation;
+use App\Entity\Inscription;
+use App\Entity\Restauration;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\Atelier;
-use App\Entity\Theme;
-use App\Entity\Vacation;
+use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 
 class DashboardController extends AbstractDashboardController
 {
@@ -48,5 +55,12 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Atelier', 'fas fa-palette', Atelier::class);
         yield MenuItem::linkToCrud('Theme', 'fas fa-masks-theater', Theme::class);
         yield MenuItem::linkToCrud('Vacation', 'fas fa-calendar-days', Vacation::class);
+        yield MenuItem::linkToCrud('Chambre', 'fas fa-bed', Chambre::class);
+        yield MenuItem::linkToCrud('Hotel', 'fas fa-bell-concierge', Hotel::class);
+        yield MenuItem::linkToCrud('Nuites', 'fas fa-moon', Nuites::class);
+        yield MenuItem::linkToCrud('Restauration', 'fas fa-utensils', Restauration::class);
+        yield MenuItem::linkToCrud('Inscription', 'fas fa-pen-clip', Inscription::class);
+        yield MenuItem::linkToCrud('Etat', 'fas fa-list-check', Etat::class);
+        yield MenuItem::linkToCrud('Utilisateurs', 'fas fa-user', User::class);
     }
 }

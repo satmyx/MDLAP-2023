@@ -3,75 +3,133 @@
 {% block title %}Inscription Congrés
 {% endblock %}
 
+{% block header %}
+	{% include '/HTMLelements/header.html.twig' %}
+{% endblock %}
+
 {% block body %}
 
 	{% for message in app.flashes('error') %}
 		<div class="alert alert-warning fw-bolder text-center">
 			{{ message }}
 		</div>
-    {% endfor %}
+	{% endfor %}
 
-    <div class="container">
-        <h1 class="text-center text-warning p-2">Inscription au congrés</h1>
-        <div class="row ">
+	<div class="container">
+		<h1 class="text-center text-warning p-2">Inscription au congrés</h1>
+		<div class="row ">
 
-            <div class="col-lg-4 col-md-12">
-                <h5>Nom du Participant : </h5> <p>{{ nomlicencie }}</p>
-                <h5>Prénom : </h5> <p>{{ prenomlicencie }}</p>
-                <h5>Numéro de Licence : </h5> <p>{{ numerolicence }}</p>
-            </div>
+			<div class="col-lg-4 col-md-12">
+				<h5>Nom du Participant :
+				</h5>
+				<p>{{ nomlicencie }}</p>
+				<h5>Prénom :
+				</h5>
+				<p>{{ prenomlicencie }}</p>
+				<h5>Numéro de Licence :
+				</h5>
+				<p>{{ numerolicence }}</p>
+			</div>
 
-            <div class="col-lg-4 col-md-6">
-                <h5>Ville : </h5> <p>{{ ville }}</p>
-                <h5>Adresse : </h5> <p>{{ adresse1 }}</p>
-                <h5>Code Postal : </h5> <p>{{ cp }}</p>
-            </div>
+			<div class="col-lg-4 col-md-6">
+				<h5>Ville :
+				</h5>
+				<p>{{ ville }}</p>
+				<h5>Adresse :
+				</h5>
+				<p>{{ adresse1 }}</p>
+				<h5>Code Postal :
+				</h5>
+				<p>{{ cp }}</p>
+			</div>
 
-            <div class="col-lg-4 col-md-6">
-                <h5>Qualité : </h5> <p>{{ qualite }}</p>
-                <h5>Téléphone : </h5> <p>{{ tel }}</p>
-                <h5>Mail : </h5> <p>{{ mail }}</p>
-            </div>
+			<div class="col-lg-4 col-md-6">
+				<h5>Qualité :
+				</h5>
+				<p>{{ qualite }}</p>
+				<h5>Téléphone :
+				</h5>
+				<p>{{ tel }}</p>
+				<h5>Mail :
+				</h5>
+				<p>{{ mail }}</p>
+			</div>
 
-        </div>
-        <hr>
-        {{ form_start(form)}}
-        {{ form_label(form.atelierInscrit, 'Choix Des Ateliers - (5 Maximum)') }}
-        {% for batch in form.atelierInscrit|batch(2) %}
-            <div class="row">
-                {% for option in batch %}
-                    <div class="col">
-                        {{ form_label(option) }}
-                        {{ form_widget(option) }}
-                    </div>
-                {% endfor %}
-            </div>
-        {% endfor %}
-        <hr>
-        {{ form_label(form.loger, 'Bulletin Réservation Hôtel') }}
-        {% for batch in form.loger|batch(4) %}
-            <div class="row">
-                {% for option in batch %}
-                    <div class="col">
-                        {{ form_label(option) }}
-                        {{ form_widget(option) }}
-                    </div>
-                {% endfor %}
-            </div>
-        {% endfor %}
-        <hr>
-        {{ form_label(form.restaurer, 'Bulletin Réservation Accompagnant(e)') }}
-        {% for batch in form.restaurer|batch(2) %}
-            <div class="row">
-                {% for option in batch %}
-                    <div class="col">
-                        {{ form_label(option) }}
-                        {{ form_widget(option) }}
-                    </div>
-                {% endfor %}
-            </div>
-        {% endfor %}
-        <hr>
-        {{ form_end(form)}}
-    </div>
+		</div>
+		<hr>
+		{{ form_start(form)}}
+		{{ form_label(form.atelierInscrit, 'Choix Des Ateliers - (5 Maximum)') }}
+		{% for batch in form.atelierInscrit|batch(2) %}
+			<div class="row">
+				{% for option in batch %}
+					<div class="col">
+						{{ form_label(option) }}
+						{{ form_widget(option) }}
+					</div>
+				{% endfor %}
+			</div>
+		{% endfor %}
+		{% if idqualite == 21 or idqualite == 20 %}
+			<div class="d-none">
+				{{ form_label(form.loger, 'Bulletin Réservation Hôtel') }}
+				{% for batch in form.loger|batch(4) %}
+					<div class="row">
+						{% for option in batch %}
+							<div class="col">
+								{{ form_label(option) }}
+								{{ form_widget(option) }}
+							</div>
+						{% endfor %}
+					</div>
+				{% endfor %}
+			</div>
+		{% else %}
+			<hr>
+			{{ form_label(form.loger, 'Bulletin Réservation Hôtel') }}
+			{% for batch in form.loger|batch(4) %}
+				<div class="row">
+					{% for option in batch %}
+						<div class="col">
+							{{ form_label(option) }}
+							{{ form_widget(option) }}
+						</div>
+					{% endfor %}
+				</div>
+			{% endfor %}
+		{% endif %}
+
+		{% if idqualite == 21 %}
+
+			<div class="d-none">
+				{{ form_label(form.restaurer, 'Bulletin Réservation Accompagnant(e)') }}
+				{% for batch in form.restaurer|batch(2) %}
+					<div class="row">
+						{% for option in batch %}
+							<div class="col">
+								{{ form_label(option) }}
+								{{ form_widget(option) }}
+							</div>
+						{% endfor %}
+					</div>
+				{% endfor %}
+			</div>
+
+		{% else %}
+			<hr>
+			{{ form_label(form.restaurer, 'Bulletin Réservation Accompagnant(e)') }}
+			{% for batch in form.restaurer|batch(2) %}
+				<div class="row">
+					{% for option in batch %}
+						<div class="col">
+							{{ form_label(option) }}
+							{{ form_widget(option) }}
+						</div>
+					{% endfor %}
+				</div>
+			{% endfor %}
+		{% endif %}
+
+		<hr>
+		{{ form_end(form)}}
+	</div>
 {% endblock %}

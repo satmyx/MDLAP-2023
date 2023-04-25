@@ -17,12 +17,21 @@
                         <a class="nav-link" href="/inscription">Inscription</a>
                     </li>
                     <li>
+                        <a class="nav-link" href="/validation">Validation</a>
+                    </li>
+                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')%}
+                    <li>
                         <a class="nav-link" href="/admin">Gestion</a>
                     </li>
+                    {% endif %}
                 </ul>
                 <form class="d-flex gap-2" role="connect">
-{#                    après avoir cliqué sur le bouton on redirige vers un écran de connection #}
-                    <button class="btn btn-warning" type="submit">Se Connecter</button>
+                {# après avoir cliqué sur le bouton on redirige vers un écran de connection #}
+                {% if app.user %}
+                    <a class="btn btn-danger" href="{{ path('app_logout') }}">Me déconnecter</a>
+                {% else %}
+                    <a class="btn btn-warning" href="{{ path('app_login') }}">Se Connecter</a>
+                {% endif %}
                 </form>
             </div>
         </div>

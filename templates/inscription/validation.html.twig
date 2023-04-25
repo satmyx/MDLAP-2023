@@ -3,27 +3,35 @@
 {% block body %}
 	<h1>Maison des ligues - Votre inscription a était valider</h1>
 
-    <p>Voici les informations concernant votre inscription :</p>
+	<p>Voici les informations concernant votre inscription :</p>
 
-    	<div class="container">
-			<div class="row gx-1 ">
+	<div class="container">
+		<div class="row gx-1 ">
 
+			{% if logementInscrit == null %}
+				<p>Vous posséder un logement dans les alentours ou un logement vous seras fournis</p>
+
+			{% else %}
 				<div class="col-lg-4 col-md-12">
 					<h5 class="text-center">Logement</h5>
 					<ul>
 						<li>{{ logementInscrit.libelle }}</li>
 					</ul>
 				</div>
+			{% endif %}
 
-				<div class="col-lg-4 col-md-6">
-					<h5 class="text-center">Ateliers</h5>
-					<ul>
-						{% for atelier in listeDesAteliers %}
-							<li>{{ atelier|e }}</li>
-						{% endfor %}
-					</ul>
-				</div>
+			<div class="col-lg-4 col-md-6">
+				<h5 class="text-center">Ateliers</h5>
+				<ul>
+					{% for atelier in listeDesAteliers %}
+						<li>{{ atelier|e }}</li>
+					{% endfor %}
+				</ul>
+			</div>
 
+			{% if idqualite == 21 %}
+				<p>Vous ne pouvez avoir d'accompagnement</p>
+			{% else %}
 				<div class="col-lg-4 col-md-6">
 					<h5 class="text-center">Restaurations</h5>
 					<ul>
@@ -32,10 +40,13 @@
 						{% endfor %}
 					</ul>
 				</div>
+			{% endif %}
 
-			</div>
 		</div>
-		<h5>Montant : {{ prixTotal }} €</h5>
+	</div>
+	<h5>Montant :
+		{{ prixTotal }}
+		€</h5>
 
 	<p>Bonne journée.</p>
 {% endblock body %}

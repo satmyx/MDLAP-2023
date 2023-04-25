@@ -29,9 +29,8 @@
 
 					<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-					<button class="btn btn-warning mt-4" type="submit">
-						Connexion
-					</button>
+					<button class="btn btn-warning mt-4" type="submit">Connexion</button>
+					<a class="btn btn-warning mt-4" href="{{ path('app_register') }}">S'enregistrer</a>
 				</form>
 			</div>
 		</div>

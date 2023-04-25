@@ -3,6 +3,10 @@
 {% block title %}Validation de l'inscription
 {% endblock %}
 
+{% block header %}
+	{% include '/HTMLelements/header.html.twig' %}
+{% endblock %}
+
 {% block body %}
 
 	<div class="container">
@@ -40,12 +44,20 @@
 		<div class="container">
 			<div class="row gx-1 ">
 
-				<div class="col-lg-4 col-md-12">
-					<h5 class="text-center">Logement</h5>
-					<ul>
-						<li>{{ logementInscrit.libelle }}</li>
-					</ul>
-				</div>
+				{% if logementInscrit == null %}
+					<div class="col-lg-4 col-md-12">
+						<h5 class="text-center">Logement</h5>
+						<p>Vous posséder un logement dans les alentours ou un logement vous seras fournis</p>
+					</div>
+
+				{% else %}
+					<div class="col-lg-4 col-md-12">
+						<h5 class="text-center">Logement</h5>
+						<ul>
+							<li>{{ logementInscrit.libelle }}</li>
+						</ul>
+					</div>
+				{% endif %}
 
 				<div class="col-lg-4 col-md-6">
 					<h5 class="text-center">Ateliers</h5>
@@ -56,18 +68,24 @@
 					</ul>
 				</div>
 
-				<div class="col-lg-4 col-md-6">
-					<h5 class="text-center">Restaurations</h5>
-					<ul>
-						{% for restauration in listeDesRestaurations %}
-							<li>{{ restauration|e }}</li>
-						{% endfor %}
-					</ul>
-				</div>
+				{% if idqualite == 21 %}
+					<p>Vous ne pouvez avoir d'accompagnement</p>
+				{% else %}
+					<div class="col-lg-4 col-md-6">
+						<h5 class="text-center">Restaurations</h5>
+						<ul>
+							{% for restauration in listeDesRestaurations %}
+								<li>{{ restauration|e }}</li>
+							{% endfor %}
+						</ul>
+					</div>
+				{% endif %}
 
 			</div>
 		</div>
-		<h5>Montant : {{ prixTotal }} €</h5>
+		<h5>Montant :
+			{{ prixTotal }}
+			€</h5>
 		<a class="btn btn-warning" href="{{ path('app_validation_inscription_etat') }}">Valider mon inscription</a>
 	</div>
 {% endblock %}
