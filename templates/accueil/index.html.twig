@@ -10,7 +10,6 @@
     <h1 class="text-center text-warning">Le congrès de la fédération française d'escrime</h1>
     <h3 class="text-center text-decoration-underline">du 16 Septembre 2023 au 17 Septembre 2023</h3>
     <h3 class="mt-5"></h3>
-    <h3 style="margin-left: 50px;">les ateliers:</h3>
     <div class="container-lg bg-warning bg-opacity-10">
         {% for atelier in ateliers %}
             {% if loop.index0 % 3 == 0 %}
@@ -19,10 +18,16 @@
                 <div class="col-md-4 border border-warning">
                     <div class="item">
                         <h5>{{ atelier.libelle }} :</h5>
+                        <p>{{ atelier.vacation.dateHeureDebut|format_datetime('short','short',locale='fr') }} - {{ atelier.vacation.dateHeureFin|format_datetime('short','short',locale='fr') }}</p>
                         <p>Nombres de places : {{ atelier.nbplaces }}</p>
-                        {% for theme in themes|keys %}
-                                <p>Thèmes:{{ theme }}</p>
-                        {% endfor %}
+                        <p>Les thèmes : </p>
+                        <p>
+                            {% for theme in themes %}
+                                {% if atelier.id == theme.atelier.id %}
+                                    -{{ theme.libelle }}<br>
+                                {% endif %}
+                            {% endfor %}
+                        </p>
                     </div>
                 </div>
                 {% if loop.index0 % 3 == 2 or loop.last %}
@@ -30,6 +35,30 @@
             {% endif %}
         {% endfor %}
     </div>
+    <br>
+    <div class="container-lg bg-warning bg-opacity-10">
+        {% for hotel in hotels %}
+            {% if loop.index0 % 3 == 0 %}
+                <div class="row">
+                {% endif %}
+                <div class="col-md-6 border border-warning">
+                    <div class="item">
+                        <h5>{{ hotel.nom }} :</h5>
+                        <p>
+                            {% for chambre in chambres %}
+                                {% if hotel.id == chambre.hotel.id %}
+                                    {{ chambre.libelle }} {{ chambre.tarifNuites }}€<br>
+                                {% endif %}
+                            {% endfor %}
+                        </p>
+                    </div>
+                </div>
+                {% if loop.index0 % 3 == 2 or loop.last %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
 {% endblock %}
 
 {% block footer %}
