@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: VacationRepository::class)]
 class Vacation
@@ -17,9 +18,11 @@ class Vacation
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Assert\GreaterThanOrEqual('today')]
     private ?\DateTimeInterface $dateHeureDebut = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Assert\GreaterThan(propertyPath: 'dateHeureDebut')]
     private ?\DateTimeInterface $dateHeureFin = null;
 
     #[ORM\OneToMany(mappedBy: 'vacation', targetEntity: Atelier::class)]
@@ -87,5 +90,12 @@ class Vacation
         }
 
         return $this;
+    }
+    
+    public function __toString() {
+        $debut = $this->dateHeureDebut->format('d-m-Y H:i:s');
+        $fin = $this->dateHeureFin->format('d-m-Y H:i:s');
+        $result = 'Du ' . $debut . ' au ' . $fin;
+        return $result;
     }
 }
