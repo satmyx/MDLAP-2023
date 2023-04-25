@@ -21,10 +21,11 @@ class Atelier
     #[ORM\Column]
     private ?int $nbPlaces = null;
 
-
-
     #[ORM\ManyToOne(inversedBy: 'ateliers')]
     private ?Vacation $vacation = null;
+
+    #[ORM\ManyToMany(targetEntity: Inscription::class, mappedBy: 'atelierInscrit')]
+    private Collection $inscriptions;
 
     #[ORM\OneToMany(mappedBy: 'atelier', targetEntity: Theme::class)]
     private Collection $themes;
@@ -32,6 +33,7 @@ class Atelier
     public function __construct()
     {
         $this->themes = new ArrayCollection();
+        $this->inscriptions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -101,6 +103,34 @@ class Atelier
             if ($theme->getAtelier() === $this) {
                 $theme->setAtelier(null);
             }
+        }
+
+        return $this;
+    }
+
+
+        /**
+     * @return Collection<int, Inscription>
+     */
+    public function getInscriptions(): Collection
+    {
+        return $this->inscriptions;
+    }
+
+    public function addInscription(Inscription $inscription): self
+    {
+        if (!$this->inscriptions->contains($inscription)) {
+            $this->inscriptions->add($inscription);
+            $inscription->addAtelierInscrit($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInscription(Inscription $inscription): self
+    {
+        if ($this->inscriptions->removeElement($inscription)) {
+            $inscription->removeAtelierInscrit($this);
         }
 
         return $this;

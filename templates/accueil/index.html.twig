@@ -46,8 +46,8 @@
                         <h5>{{ hotel.nom }} :</h5>
                         <p>
                             {% for chambre in chambres %}
-                                {% if hotel.id == chambre.hotel.id %}
-                                    {{ chambre.libelle }} {{ chambre.tarifNuites }}€<br>
+                                {% if hotel.id == chambre.apartenir.id %}
+                                    {{ chambre.libelle }} {{ chambre.tarifsNuites }}€<br>
                                 {% endif %}
                             {% endfor %}
                         </p>
