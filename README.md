@@ -47,12 +47,12 @@
 7. Taper la commande `npm install` puis `npm run build`
 
 ### Serveur production
-Interne : 10.10.2.142 :80 (MDL) 10.10.2.142 :81(API)
-Externe : SSH -L 127.0.0.1:1337:10.10.2.142:80 root@freesio.lyc-bonaparte.fr -p 22142
+1. **`Interne :`** 10.10.2.142 :80 (MDL) 10.10.2.142 :81(API)
+2. **`Externe :`** SSH -L 127.0.0.1:1337:10.10.2.142:80 root@freesio.lyc-bonaparte.fr -p 22142
 
 ## configuration de Postman
 1. Téléchargement de postman : https://www.postman.com/
-2. Tutoriel postman : **`https://www.youtube.com/watch?v=vMdhZvmRPe0&ab_channel=NouvelleTechno`**
+2. Tutoriel postman : https://www.youtube.com/watch?v=vMdhZvmRPe0&ab_channel=NouvelleTechno
 
 
 AP Maison des ligues - BTS SIO 2023 - DODERO ADRIEN - CROCHARD PASCAL - ESCULIER DYLAN
