@@ -39,17 +39,6 @@ class AtelierRepository extends ServiceEntityRepository
         }
     }
     
-    
-    public function getEverythingAtelier()
-    {
-        $connexion = $this->getEntityManager()->getConnection();
-        $sql = "select * from atelier";
-        $statment = $connexion->prepare($sql);
-        $result = $statment->executeQuery();
-        return $result->fetchAllAssociative();
-    }
-    
-    
 //    public function findAteliers(ManagerRegistry $doctrine): array
 //    {
 //        $manager = $doctrine->getManager();

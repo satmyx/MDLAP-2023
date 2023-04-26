@@ -52,7 +52,7 @@ class ValidationInscriptionController extends AbstractController
         } elseif ($licencie[0]['idqualite'] == 21) {
             $prixTotal = 0;
         } else {
-            $prixTotal = 100 + 35 * count($newInscription->getRestaurer()) + $newInscription->getLoger()->getTarifsNuites();
+            $prixTotal = 110 + 35 * count($restaurationInscrit) + $logementInscrit->getTarifsNuites();
         }
 
         $licencie = $api->getLicencies($this->getUser()->getNumlicence());
@@ -115,7 +115,7 @@ class ValidationInscriptionController extends AbstractController
         } elseif ($licencie[0]['idqualite'] == 21) {
             $prixTotal = 0;
         } else {
-            $prixTotal = 100 + 35 * count($newInscription->getRestaurer()) + $newInscription->getLoger()->getTarifsNuites();
+            $prixTotal = 110 + 35 * count($restaurationInscrit) + $logementInscrit->getTarifsNuites();
         }
 
         $email = (new TemplatedEmail())
