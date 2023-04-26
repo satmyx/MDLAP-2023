@@ -37,6 +37,11 @@
 ---
 
 ## Installation de l'environnement
+
+### API
+1. Suivre le tutoriel d'installation : https://shorturl.at/iLY14
+2. Récupérer l'api : https://github.com/satmyx/APIMDL
+
 ### Wampserver
 1. Installer [NodeJS LTS ou +](https://nodejs.org/en/download)
 2. Installer [Scoop](https://scoop.sh) en ligne de commande
