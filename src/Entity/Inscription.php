@@ -42,6 +42,12 @@ class Inscription
     #[ORM\JoinColumn(nullable: false)]
     private ?Etat $etat = null;
 
+    #[ORM\ManyToOne(inversedBy: 'inscriptions')]
+    private ?status $status = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $datedernieremodification = null;
+
     public function __construct()
     {
         $this->atelierInscrit = new ArrayCollection();
@@ -145,6 +151,30 @@ class Inscription
     public function setEtat(?Etat $etat): self
     {
         $this->etat = $etat;
+
+        return $this;
+    }
+
+    public function getStatus(): ?status
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?status $status): self
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getDatedernieremodification(): ?\DateTimeInterface
+    {
+        return $this->datedernieremodification;
+    }
+
+    public function setDatedernieremodification(\DateTimeInterface $datedernieremodification): self
+    {
+        $this->datedernieremodification = $datedernieremodification;
 
         return $this;
     }

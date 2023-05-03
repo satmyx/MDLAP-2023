@@ -2,17 +2,18 @@
 
 namespace App\Controller;
 
+use DateTime;
 use App\Entity\Etat;
 use App\Service\CallApiService;
 use Symfony\Component\Mime\Address;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use App\Repository\StatusRepository;
 
 class ValidationInscriptionController extends AbstractController
 {
@@ -78,7 +79,7 @@ class ValidationInscriptionController extends AbstractController
     }
 
     #[Route('/validationetat', name: 'app_validation_inscription_etat')]
-    public function validationInscription(MailerInterface $mailer, EntityManagerInterface $manager, CallApiService $api): Response
+    public function validationInscription(MailerInterface $mailer, EntityManagerInterface $manager, CallApiService $api, StatusRepository $statutRepo): Response
     {
         // Récupération des informations
         $inscription = $this->getUser()->getInscription();
@@ -99,6 +100,12 @@ class ValidationInscriptionController extends AbstractController
         $etat = $manager->getRepository(Etat::class)->find(2);
 
         $inscription->setEtat($etat);
+        
+        $statut = $statutRepo->find(1);
+        
+        $inscription->setStatus($statut);
+        
+        $inscription->setDatedernieremodification(new DateTime('now'));
 
         foreach ($atelierInscrit as $key => $value) {
             array_push($listeDesAteliers, $value->getLibelle());

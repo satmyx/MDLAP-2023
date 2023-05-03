@@ -13,6 +13,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use App\Repository\StatusRepository;
+use App\Form\ListeStatusType;
+use App\Entity\Status;
 
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -21,7 +24,7 @@ use Symfony\Component\Mime\Address;
 class InscriptionController extends AbstractController
 {
     #[Route('/inscription', name: 'app_inscription')]
-    public function index(MailerInterface $mailer, EntityManagerInterface $manager, Request $request, CallApiService $api): Response
+    public function index(MailerInterface $mailer, EntityManagerInterface $manager, Request $request, CallApiService $api, StatusRepository $statutRepo): Response
     {
 
         if ($this->getUser()->getInscription()) {
@@ -43,6 +46,12 @@ class InscriptionController extends AbstractController
         if($form->isSubmitted() && $form->isValid()) {
 
             $newInscription->setDateInscription(new DateTime('now'));
+            
+            $newInscription->setDatedernieremodification(new DateTime('now'));
+            
+            $statut = $statutRepo->find(3);
+            
+            $newInscription->setStatus($statut);
 
             $newInscription->setLicencie($this->getUser());
 
@@ -143,4 +152,17 @@ class InscriptionController extends AbstractController
             'idqualite' => $licencie[0]['idqualite'],
         ]);
     }
+    
+//    #[Route('/listeInscription', name: 'app_inscription')]
+//    public function modif(): Response{
+//        
+//        $statut = new Status();
+//        
+//        $form = $this->createForm(ListeStatusType::class);
+//        
+//        return $this->render('inscription/trilisteInscription.html.twig',[
+//            'form'=>$form->createview(),
+//            'statut'=>$statut,
+//        ]);
+//    }
 }
