@@ -36,6 +36,7 @@ security:
         - { path: ^/admin, roles: [ROLE_USER, ROLE_ADMIN] }
         - { path: ^/validation, roles: [ROLE_USER, ROLE_ADMIN, ROLE_INSCRIT] }
         - { path: ^/inscription, roles: [ROLE_USER, ROLE_ADMIN, ROLE_INSCRIT] }
+        - { path: ^/loghistory, roles: [ROLE_ADMIN] }
         # - { path: ^/profile, roles: ROLE_USER }
 
 when@test:
