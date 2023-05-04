@@ -24,6 +24,11 @@
                         <a class="nav-link" href="/admin">Gestion</a>
                     </li>
                     {% endif %}
+                    {% if is_granted('ROLE_ADMIN')%}
+                    <li>
+                        <a class="nav-link" href="/loghistory">Historique de connexion</a>
+                    </li>
+                    {% endif %}
                 </ul>
                 <form class="d-flex gap-2" role="connect">
                 {# après avoir cliqué sur le bouton on redirige vers un écran de connection #}

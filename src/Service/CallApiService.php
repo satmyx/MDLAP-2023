@@ -51,6 +51,14 @@ class CallApiService extends AbstractController
 
         return $response->toArray()['hydra:member'];
     }
+    
+    public function getPays($ip) {
+        $response = $this->client->request(
+            'GET',
+            "http://ip-api.com/php/".$ip
+        );
+        return $response->toArray();
+    }
 
     /**
     * Permet de modifier l'email d'un licencié

@@ -4,6 +4,37 @@
 
 {% block body %}
     <div class="container">
-        <h1 class="text-center text-warning p-2">Inscription au congrés</h1>
+        <h1 class="text-center text-warning p-2">Statistiques de connexion</h1>
     </div>
+
+    <table class="table ">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Numéro de Licence</th>
+                <th scope="col">Date de connexion</th>
+                <th scope="col">Adresse IP</th>
+                <th scope="col">État</th>
+                <th scope="col">Pays</th>
+                <th scope="col">Navigateur</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for connexion in listeDesLogs %}
+                <tr>
+                    <th scope="col">{{ connexion.id }}</th>
+                    <th scope="col">{{ connexion.numlicencie }}</th>
+                    <th scope="col">{{ connexion.dateHConnexion|format_datetime('short','short',locale='fr') }}</th>
+                    <th scope="col">{{ connexion.ip }}</th>
+                    {% if connexion.etatConnexion == 0 %}
+                        <th scope="col">Refus</th>
+                    {% else %}
+                        <th scope="col">Autoriser</th>
+                    {% endif %}
+                    <th scope="col">{{ connexion.pays }}</th>
+                    <th scope="col">{{ connexion.navigateur }}</th>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
