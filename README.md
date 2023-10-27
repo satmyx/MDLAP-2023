@@ -39,7 +39,7 @@
 ## Installation de l'environnement
 
 ### API
-1. Suivre le tutoriel d'installation : https://shorturl.at/iLY14
+1. Suivre le tutoriel d'installation : https://shorturl.at/iLY14 /!\ Pour ceux qui trouvent ce repo attention le shorturl a changer celui ci pourrait vous faire télécharger quelque chose de malveillant /!\
 2. Récupérer l'api : https://github.com/satmyx/APIMDL
 
 ### Wampserver
